@@ -299,20 +299,21 @@ function lootOre(times = 1) {
 		getUpgradeEffect("normal", 13),
 		getUpgradeEffect("reincarnation", 6) ? Infinity : getUpgradeEffect("normal", 9)
 	)
-	let maxFactor = Object.keys(factors).at(-1) ?? 0;
+	let maxFactor = 0;
 	
 	let cashGain = 0, artifactGain = 0;
 	let cashFactorEffect = getUpgradeEffect("normal", "9a")
 	for (let factor in factors) {
 		cashGain += cashFactorEffect ** factor * factors[factor];
 		artifactGain += getArtifactGain(factor) * factors[factor];
+		if (factors[factor] > 0) maxFactor = Math.max(maxFactor, factor);
 	}
 	cashGain *= stats.value * getUpgradeEffect("reincarnation", 1);
 
 	game.cash += cashGain;
 	game.ascensionCash += cashGain;
 	game.minerSoulCash += cashGain;
-	if (maxFactor) setMessage(2, "Ore duplicated!" + (maxFactor > 1 ? " x" + format(maxFactor) : ""))
+	if (maxFactor > 0) setMessage(2, "Ore duplicated!" + (maxFactor > 1 ? " x" + format(maxFactor) : ""))
 	flash("cash", levelToColour(maxFactor))
 
 	game.totalOresMined += times;

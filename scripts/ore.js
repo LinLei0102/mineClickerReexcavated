@@ -124,7 +124,7 @@ function updateOreDamageUI(stats) {
 		document.getElementById("currentNetGain").style.color = damage > 0 ? "" : "#f44";
 	}
 	{
-		let {damage, income, rate} = calculateOreDamage(game.currentOre, game.activeDamage, 
+		let {damage, income, rate} = calculateOreDamage(game.currentOre, game.idleDamage, 
 			approximateFactorArray(
 				getUpgradeEffect("reincarnation", 8) ? Infinity : getUpgradeEffect("normal", 21),
 				getUpgradeEffect("normal", 15),

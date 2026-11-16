@@ -129,7 +129,10 @@ function updateOreDamageUI(stats) {
 				case "damage": default:
 					document.getElementById("currentDamage").innerHTML = format(damage);
 			}
-		document.getElementById("currentNetGain").innerHTML = "$" + format(income)
+			
+		let netGain = "$" + (income > 1000 ? format(income) : formatWhole(income, 2))
+		if (cashMulti > 1) netGain = "~" + netGain
+		document.getElementById("currentNetGain").innerHTML = netGain
 
 		document.getElementById("currentDamage").style.color = 
 		document.getElementById("currentNetGain").style.color = damage > 0 ? "" : "#f44";
@@ -168,7 +171,11 @@ function updateOreDamageUI(stats) {
 				case "damage": default:
 					document.getElementById("currentIdleDamage").innerHTML = format(damage);
 			}
-			document.getElementById("currentIdleGain").innerHTML = "$" + format(income)
+			
+			let netGain = "$" + (income > 1000 ? format(income) : formatWhole(income, 2))
+			if (cashMulti > 1) netGain = "~" + netGain
+			document.getElementById("currentIdleGain").innerHTML = netGain
+		
 			document.getElementById("currentIdle").style.display = "";
 		} else {
 			document.getElementById("currentIdle").style.display = "none";

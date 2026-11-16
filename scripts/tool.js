@@ -82,10 +82,16 @@ function loadToolScreenInfo(tool) {
 	document.getElementById("currentTool").innerHTML = name
 	if (name.length > 13) {document.getElementById("currentTool").style.fontSize = "6vh"}
 	else {document.getElementById("currentTool").style.fontSize = "8vh"}
-
-	let devourerMark = game.currentTool - toolNames.length
-	document.getElementById("toolIconLarge").style.backgroundImage = "url('assets/icons/" + currentTool + "s/" + Math.min(game.currentTool, toolNames.length + 1) + ".png')"
-	document.getElementById("toolIconLarge").style.filter = devourerMark > 0 ? `hue-rotate(${devourerMark * Math.E * 30}deg)` : ""
+	
+	if (currentTool == "tool") {
+		let devourerMark = game.currentTool - toolNames.length
+		document.getElementById("toolIconLarge").style.backgroundImage = "url('assets/icons/tools/" + Math.min(game.currentTool, toolNames.length + 1) + ".png')"
+		document.getElementById("toolIconLarge").style.filter = devourerMark > 0 ? `hue-rotate(${devourerMark * Math.E * 30}deg)` : ""
+	} else if (currentTool == "comp") {
+		let devourerMark = game.currentTool - compNames.length
+		document.getElementById("toolIconLarge").style.backgroundImage = "url('assets/icons/companions/" + Math.min(game.currentCompanion, compNames.length + 1) + ".png')"
+		document.getElementById("toolIconLarge").style.filter = devourerMark > 0 ? `hue-rotate(${devourerMark * Math.E * 30}deg)` : ""
+	}
 
 	document.getElementById("nextTool").innerHTML = nextName
 

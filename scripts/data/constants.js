@@ -12,7 +12,7 @@ const toolCosts = [10, 60, 300, 2000, 10000, 80000, 400000, 5e6, 2.5e7, 1.5e8, 7
 
 const compNames = ["Miner rock", "Miner dog", "Miner gnome", "Miner human", "Buffed miner", "Miner & a co.", "Trio of miners", "Team of miners", "Mining machine", "Miner dragon", "Mining factory", "Mining corporation", "Mining town", "Mining county", "Mining empire", "Mining continent", "Mining planet", "Mining dyson sphere", "Mining star cluster", "Galaxy miner", "Supercluster miner", "Universe miner"]
 const compDamages = [1, 3, 6, 10, 16, 25, 40, 60, 80, 110, 140, 170, 200, 250, 300, 350, 400]
-const compCosts = [1, 25, 100, 400, 1600, 3200, 6400, 15000, 45000, 150000, 600000, 3000000, 1e7, 6.6e7, 7.7e8, 1e10]
+const compCosts = [1, 10, 25, 75, 300, 1600, 4000, 12000, 45000, 150000, 600000, 3000000, 1e7, 6.6e7, 7.7e8, 1e10]
 
 const illions = ["thousand", "million", "billion", "trillion", "quadrillion", "quintillion", "sextillion", "septillion", "octillion", "nonillion", "decillion", "undecillion", "duodecillion", "tredecillion", "quattuordecillion", "quindecillion", "sexdecillion", "septendecillion", "octodecillion", "novemdecillion", "vigintillion"]
 const illionsShort = ["K", "M", "B", "T", "Qa", "Qt", "Sx", "Sp", "Oc", "No", "Dc", "UD", "DD", "TD", "QaD", "QiD", "SxD", "SpD", "OcD", "NoD", "Vg", "UV", "DV", "TV", "QaV", "QiV", "SxV", "SpV", "OcV", "NoV"]

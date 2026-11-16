@@ -82,7 +82,10 @@ function loadToolScreenInfo(tool) {
 	document.getElementById("currentTool").innerHTML = name
 	if (name.length > 13) {document.getElementById("currentTool").style.fontSize = "6vh"}
 	else {document.getElementById("currentTool").style.fontSize = "8vh"}
-	document.getElementById("toolIconLarge").style.backgroundImage = "url('" + currentTool + "Icons/" + game.currentTool + ".png')"
+
+	let devourerMark = game.currentTool - toolNames.length
+	document.getElementById("toolIconLarge").style.backgroundImage = "url('assets/icons/" + currentTool + "s/" + Math.min(game.currentTool, toolNames.length + 1) + ".png')"
+	document.getElementById("toolIconLarge").style.filter = devourerMark > 0 ? `hue-rotate(${devourerMark * Math.E * 30}deg)` : ""
 
 	document.getElementById("nextTool").innerHTML = nextName
 

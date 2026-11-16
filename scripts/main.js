@@ -56,7 +56,7 @@ function tick() {
 				hasAuto = true;
 				upgradeTool("comp");
 			}
-			if (game.auto.artifact && game.artifactBoost < getUpgradeEffect("normal", 5) * getUpgradeEffect("normal", 6)) {
+			if (game.auto.artifact && (getUpgradeEffect("reincarnation", 9) || game.artifactBoost < getUpgradeEffect("normal", 5) * getUpgradeEffect("normal", 6))) {
 				hasAuto = true;
 				useArtifact();
 			}

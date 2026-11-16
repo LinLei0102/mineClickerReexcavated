@@ -4,7 +4,7 @@ function openArtifactScreen() {
 	if (game.level >= 10) {
 		document.getElementById("artifactScreen").style.left = "0"
 		document.getElementById("ascensionScreen").style.left = "100%"
-		document.getElementById("artifactChance").innerHTML = format(game.artifactChance)
+		document.getElementById("artifactChance").innerHTML = format(game.artifactChance * 100)
 		document.getElementById("artifactBoost").innerHTML = format(game.artifactBoost)
 		document.getElementById("artifactBoostCap").innerHTML = format(getUpgradeEffect("normal", 6) * getUpgradeEffect("normal", 5))
 		document.getElementById("lastBoost").innerHTML = ""
@@ -31,7 +31,14 @@ function useArtifact() {
 		let artifactBoost = 5 * Math.random() * (10 + (1 / Math.random() * (Math.random() * (count - 1) * 2 + 1)))
 		if (artifactBoost > maxBoost ** 0.5) artifactBoost = (artifactBoost * maxBoost ** 0.5) ** 0.5
 		artifactBoost += getUpgradeEffect("normal", 19) * game.artifactUsed / multi;
-		if (artifactBoost > maxBoost) artifactBoost = maxBoost;
+		if (artifactBoost > maxBoost) {
+			if (getUpgradeEffect("reincarnation", 9)) {
+				let strength = getUpgradeEffect("reincarnation", "9a");
+				artifactBoost = (artifactBoost * maxBoost ** (1 + 1 / strength)) ** (strength) / maxBoost;
+			} else {
+				artifactBoost = maxBoost;
+			}
+		}
 		artifactBoost *= multi;
 
 		if (artifactBoost > game.artifactBoost) {

@@ -31,17 +31,18 @@ function initUpgrades() {
             if (id == "$next") {
                 upg.style.top = "55vh";
                 upg.style.left = "calc(50% + 20vh)";
-                upg.style.backgroundImage = "url('upgrades/next.png')";
+                upg.style.backgroundImage = "url('assets/icons/upgrades/next.png')";
+                upg.onclick = () => setUpgradePage(indexConst + 1);
                 upg.onclick = () => setUpgradePage(indexConst + 1);
             } else if (id == "$all") {
                 upg.style.top = (data.row * 10 + 15) + "vh";
                 upg.style.left = "calc(50% + " + (data.col * 10) + "vh)";
-                upg.style.backgroundImage = "url('upgrades/all.png')";
+                upg.style.backgroundImage = "url('assets/icons/upgrades/all.png')";
                 upg.onclick = () => displayUpgrade(type, id);
             } else {
                 upg.style.top = (data.row * 10 + 15) + "vh";
                 upg.style.left = "calc(50% + " + (data.col * 10) + "vh)";
-                upg.style.backgroundImage = "url('upgrades/" + type + "/" + id + ".png')";
+                upg.style.backgroundImage = "url('assets/icons/upgrades/" + type + "/" + id + ".png')";
                 upg.onclick = () => displayUpgrade(type, id);
             }
 
@@ -53,7 +54,7 @@ function initUpgrades() {
             upg.classList.add("upgrade");
             upg.style.top = "55vh";
             upg.style.left = "calc(50% - 20vh)";
-            upg.style.backgroundImage = "url('upgrades/previous.png')";
+            upg.style.backgroundImage = "url('assets/icons/upgrades/previous.png')";
             upg.onclick = () => setUpgradePage(indexConst - 1);
             holder.appendChild(upg);
         }

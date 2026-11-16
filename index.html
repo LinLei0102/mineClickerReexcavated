@@ -198,17 +198,18 @@
 				<div id="settings">
 					<button onclick="changeNumberFormat()">Large number formatting: <span id="numberFormat">Standard</span></button>
 					<button onclick="enableDisableMessages()">Top bar messages: <span id="topBarMessages">On</span></button>
+					<button onclick="enableDisableEvilMode()">Evil mode: <span id="evilMode">Off</span></button>
 					<button id="homeStatButton" onclick="changeHomeStat()">Stat on main screen: <span id="homeStat">Damage</span></button>
 					<button onclick="exportGame()">Export game</button>
 					<button onclick="importGame()">Import game</button>
 					<button style="color: #822" onclick="hardReset()">Hard reset</button>
 				</div>
 				<div class="bottomButtons">
-					<p style="font-size: 3vh; color: #777">
+					<p style="font-size: 2.5vh; padding-bottom: 1vh; color: #777">
 						Mine Clicker Re-excavated by Demonin<br>
 						"Re<sup>2</sup>-excavated" mod by ducdat0507<br>
-						Original Mine Clicker by Tolan (2014)<br>
-						Ore icons generated using Midjourney
+						Original Mine Clicker by Tolan (2014)
+						<span id="evilModeCredit"><br>Ore icons generated using Midjourney</span>
 					</p>
 					<div class="bottomButton" onclick="closeStatsScreen()">Back</div>
 				</div>

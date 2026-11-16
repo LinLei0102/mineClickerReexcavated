@@ -16,6 +16,7 @@ function initSave() {
 		numberFormat: "standardLong",
 		homeStat: "damage",
 		messages: true,
+		evilMode: false,
 		unlockedOres: 1,
 		currentOre: 1,
 		currentTool: 1,

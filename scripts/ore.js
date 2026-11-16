@@ -48,7 +48,7 @@ function updateOreUI(stats) {
 		document.getElementById("oreIcon").style.filter = "drop-shadow(0 0 1vh #222)"
 	}
 
-	document.getElementById("oreIcon").style.backgroundImage = "url('oreIcons/" + stats.icon + ".png')"
+	document.getElementById("oreIcon").style.backgroundImage = "url('assets/icons/ores" + (game.evilMode ? "Evil" : "") + "/" + stats.icon + ".png')"
 	document.getElementById("oreName").innerHTML = stats.name
 	let realName = document.getElementById("oreName").textContent;
 	if (realName.length > 18) {document.getElementById("oreName").style.fontSize = "5vh"}
@@ -60,7 +60,7 @@ function updateOreUI(stats) {
 	document.getElementById("currentHardness").innerHTML = format(stats.hardness)
 
 
-	document.getElementById("background").style.backgroundImage = "url('texture" + (currentLayer) + ".png')"
+	document.getElementById("background").style.backgroundImage = "url('assets/icons/backgrounds" + (game.evilMode ? "Evil" : "") + "/" + (currentLayer) + ".png')"
 	document.getElementById("background").style.boxShadow = game.currentOre > oreNames.length ? `inset 0 0 30vh ${levelToColour(stats.transLevel)}` : "";
 	if (currentLayer != previousLayer) {
 		setMessage(0,"Now entering: " + layerNames[currentLayer-1])
@@ -90,6 +90,16 @@ function updateOreUI(stats) {
 
 function updateOreDamageUI(stats) {
 	stats ??= getOreStats(game.currentOre);
+
+	let cashMulti = calculateFactorSum( 
+			approximateFactorArray(
+				getUpgradeEffect("reincarnation", 6) ? Infinity : getUpgradeEffect("normal", 9),
+				getUpgradeEffect("normal", 3),
+				getUpgradeEffect("normal", 13),
+				5
+			)
+		);
+
 	{
 		let chance = 1;
 		let {damage, income, rate} = calculateOreDamage(game.currentOre, game.activeDamage, 
@@ -100,6 +110,7 @@ function updateOreDamageUI(stats) {
 				5
 			)
 		);
+		income *= cashMulti;
 
 			switch(game.homeStat) {
 				case "breakRate": 
@@ -137,6 +148,7 @@ function updateOreDamageUI(stats) {
 		rate /= game.tapSpeed;
 		damage *= game.tapSpeed;
 		income *= game.tapSpeed;
+		income *= cashMulti;
 
 		if (game.level > 5) {
 			switch(game.homeStat) {
@@ -166,6 +178,15 @@ function updateOreDamageUI(stats) {
 	}
 }
 
+function calculateFactorSum(critList) {
+	let sum = 0;
+	for (let i = 0; i < critList.length; i++) {
+		let chance = critList[i][0] - (+critList[i+1]?.[0] || 0)
+		let thisValue = critList[i][1]
+		sum += thisValue * chance;
+	}
+	return sum;
+}
 function calculateOreDamage(ore, damage, critList = []) {
 	let stats = getOreStats(ore);
 	critList.unshift([1, 1]);
@@ -257,8 +278,8 @@ function doIdleDamage(times) {
 	let factors = doFactors(
 		times, 
 		getUpgradeEffect("normal", 15),
-		0.5,
-		getUpgradeEffect("normal", 21)
+		getUpgradeEffect("normal", "21a"),
+		getUpgradeEffect("reincarnation", 8) ? Infinity : getUpgradeEffect("normal", 21)
 	)
 	for (let factor in factors) {
 		factorTimes = factors[factor];

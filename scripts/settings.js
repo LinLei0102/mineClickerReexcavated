@@ -37,9 +37,17 @@ function updateSettings() {
 	}[game.homeStat])
 
 	document.getElementById("topBarMessages").innerHTML = game.messages ? "On" : "Off"
+	document.getElementById("evilMode").innerHTML = game.evilMode ? "On" : "Off"
+	document.getElementById("evilModeCredit").style.display = game.evilMode ? "" : "none";
 }
 
 function enableDisableMessages() {
 	game.messages = !game.messages
+	updateSettings();
+}
+
+function enableDisableEvilMode() {
+	game.evilMode = !game.evilMode
+	updateOreUI();
 	updateSettings();
 }

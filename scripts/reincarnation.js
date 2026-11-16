@@ -29,6 +29,11 @@ function updateReincarnationGain() {
 	minerSoulBreakdown.artifact = (Math.log2(game.minerSoulArtifacts + 1024) - 9) ** 1.5;
 	game.minerSoulRate *= minerSoulBreakdown.artifact;
 
+	if (getUpgradeEffect("reincarnation", 10)) {
+		minerSoulBreakdown.level = Math.max(1, game.level) ** getUpgradeEffect("reincarnation", 10);
+		game.minerSoulRate *= minerSoulBreakdown.level;
+	}
+
 	minerSoulLastUpdated = Date.now();
 	if (document.getElementById("reincarnationScreen").style.left == "0px") updateReincarnationUI();
 }
@@ -36,8 +41,11 @@ function updateReincarnationGain() {
 function updateReincarnationUI() {
 	if (!document.getElementById("minerSoulBreakdownBody").childElementCount) initReincarnationUI();
 
-	for (let item in minerSoulBreakdown) minerSoulBreakdownItems[item].value.innerHTML = 
-		item == "base" ? format(minerSoulBreakdown[item]) : "x" + formatWhole(minerSoulBreakdown[item], 1);
+	for (let item in minerSoulBreakdown) {
+		minerSoulBreakdownItems[item].row.style.display = "";
+		minerSoulBreakdownItems[item].value.innerHTML = 
+			item == "base" ? format(minerSoulBreakdown[item]) : "x" + formatWhole(minerSoulBreakdown[item], 1);
+	}
 	document.getElementById("minerSoulRate").innerHTML = "+" + format(game.minerSoulRate) + " / hour";
 	document.getElementById("minerSoulsToGet").innerHTML = format(game.minerSoulPending);
 }
@@ -46,12 +54,14 @@ function initReincarnationUI() {
 	let table = document.getElementById("minerSoulBreakdownBody");
 	let items = {
 		"base": "Base",
-		"transcend": "Transcendence",
+		"transcend": "Transcendence", 
+		"level": "Levels",
 		"cash": "Total cash", 
 		"artifact": "Total artifacts"
 	}
 	for (let item in items) {
 		let row = document.createElement("tr");
+		row.style.display = "none";
 
 		let header = document.createElement("th");
 		header.scope = "row";

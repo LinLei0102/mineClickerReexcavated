@@ -2,13 +2,13 @@
     font-family:"Pixelated MS Sans Serif";
     font-style:normal;
     font-weight:400;
-    src:url(fonts/ms_sans_serif_mono.woff) format("woff");
+    src:url(assets/fonts/ms_sans_serif_mono.woff) format("woff");
 }
 @font-face{
     font-family:"Pixelated MS Sans Serif";
     font-style:normal;
     font-weight:700;
-    src:url(fonts/ms_sans_serif_bold.woff) format("woff");
+    src:url(assets/fonts/ms_sans_serif_bold.woff) format("woff");
 }
 
 * {
@@ -508,19 +508,7 @@ button:hover {
 	z-index: 1;
 }
 .upgrade.can-buy {
-	animation: 1s ease-out infinite can-buy;
-}
-
-@keyframes can-buy {
-	0% {
-		transform: translateY(0);
-	}
-	10% {
-		transform: translateY(-0.2em);
-	}
-	20% {
-		transform: translateY(0);
-	}
+	filter: drop-shadow(0 0 1vh yellow);
 }
 
 #upgradeInfo {

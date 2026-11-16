@@ -101,7 +101,6 @@ function updateOreDamageUI(stats) {
 		);
 
 	{
-		let chance = 1;
 		let {damage, income, rate} = calculateOreDamage(game.currentOre, game.activeDamage, 
 			approximateFactorArray(
 				getUpgradeEffect("reincarnation", 7) ? Infinity : getUpgradeEffect("normal", 20),
@@ -112,26 +111,28 @@ function updateOreDamageUI(stats) {
 		);
 		income *= cashMulti;
 
-			switch(game.homeStat) {
-				case "breakRate": 
-					if (rate <= 1) {
-						rate = 1 / rate;
-						document.getElementById("currentDamage").innerHTML = 
-							rate >= 1000 ? format(rate) : formatWhole(rate, 2);
-						document.getElementById("currentActiveStat").innerHTML = "breaks / tap";
-					} else {
-						document.getElementById("currentDamage").innerHTML = 
-							rate >= 1000 ? format(rate) : formatWhole(rate, 2);
-						document.getElementById("currentActiveStat").innerHTML = "taps / break";
-					}
-					break;
+		switch(game.homeStat) {
+			case "breakRate": 
+				if (rate <= 1) {
+					rate = 1 / rate;
+					document.getElementById("currentDamage").innerHTML = 
+						rate >= 1000 ? format(rate) : formatWhole(rate, 2);
+					document.getElementById("currentActiveStat").innerHTML = "breaks / tap";
+				} else {
+					document.getElementById("currentDamage").innerHTML = 
+						rate >= 1000 ? format(rate) : formatWhole(rate, 2);
+					document.getElementById("currentActiveStat").innerHTML = "taps / break";
+				}
+				break;
 
-				case "damage": default:
-					document.getElementById("currentDamage").innerHTML = format(damage);
-			}
+			case "damage": default:
+				document.getElementById("currentDamage").innerHTML = format(damage);
+		}
 			
+		if (getUpgradeEffect("normal", 14) > 0) document.getElementById("currentDamage").prepend("~")
+
 		let netGain = "$" + (income > 1000 ? format(income) : formatWhole(income, 2))
-		if (cashMulti > 1) netGain = "~" + netGain
+		if (cashMulti > 1 && damage > 0) netGain = "~" + netGain;
 		document.getElementById("currentNetGain").innerHTML = netGain
 
 		document.getElementById("currentDamage").style.color = 
@@ -172,14 +173,17 @@ function updateOreDamageUI(stats) {
 					document.getElementById("currentIdleDamage").innerHTML = format(damage);
 			}
 			
+			if (getUpgradeEffect("normal", 15) > 0) document.getElementById("currentIdleDamage").prepend("~")
+			
 			let netGain = "$" + (income > 1000 ? format(income) : formatWhole(income, 2))
-			if (cashMulti > 1) netGain = "~" + netGain
+			if (cashMulti > 1 && damage > 0) netGain = "~" + netGain
 			document.getElementById("currentIdleGain").innerHTML = netGain
 		
 			document.getElementById("currentIdle").style.display = "";
 		} else {
 			document.getElementById("currentIdle").style.display = "none";
 		}
+
 		document.getElementById("currentIdleDamage").style.color = 
 		document.getElementById("currentIdleGain").style.color = damage > 0 ? "" : "#f44"
 	}
@@ -187,6 +191,7 @@ function updateOreDamageUI(stats) {
 
 function calculateFactorSum(critList) {
 	let sum = 0;
+	critList.unshift([1, 1]);
 	for (let i = 0; i < critList.length; i++) {
 		let chance = critList[i][0] - (+critList[i+1]?.[0] || 0)
 		let thisValue = critList[i][1]

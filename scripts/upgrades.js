@@ -170,7 +170,7 @@ function buyUpgrade(type, id) {
 
 		game.upgradesBought[type][id] = (game.upgradesBought[type][id] ?? 0) + 1;
 
-		displayUpgrade(...selectedUpgrade)
+		if (selectedUpgrade) displayUpgrade(...selectedUpgrade)
 
 		if (type == "normal" && id == 1)         calculateDamage()
 		if (type == "normal" && id == 2)         calculateDamage()

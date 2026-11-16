@@ -472,7 +472,7 @@ const upgrades = {
             effectDisplay: x => "^" + formatWhole(x, 1),
             req: () => true,
             reqDisplay: "",
-            cost: x => x >= 10 ? Infinity : 1e7 * (x + 5) ** (x ** 1.2),
+            cost: x => x >= 10 ? Infinity : 1e7 * (x + 5) ** (x ** 1.3),
             costType: "minerSouls",
         },
     }

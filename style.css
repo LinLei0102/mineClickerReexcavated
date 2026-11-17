@@ -561,7 +561,7 @@ button:hover {
 	gap: 0.3em;
 }
 
-#gameFinishScreen {
+#gameFinishScreen, #gameTrulyFinishScreen {
 	position: absolute;
 	top: 50%;
 	left: 50%;

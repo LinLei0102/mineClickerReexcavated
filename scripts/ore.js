@@ -345,7 +345,9 @@ function lootOre(times = 1) {
 
 	game.cash += cashGain;
 	game.ascensionCash += cashGain;
+	if (game.ascensionCash > Number.MAX_VALUE) game.ascensionCash = Number.MAX_VALUE;
 	game.minerSoulCash += cashGain;
+	if (game.minerSoulCash > Number.MAX_VALUE) game.minerSoulCash = Number.MAX_VALUE;
 	if (maxFactor > 0) setMessage(2, "Ore duplicated!" + (maxFactor > 1 ? " x" + format(maxFactor) : ""))
 	flash("cash", levelToColour(maxFactor))
 
@@ -391,6 +393,13 @@ function lootOre(times = 1) {
 	if (game.currentOre == 78 && !game.gameFinished) {
 		document.getElementById("gameFinishScreen").style.display = "block"
 		game.gameFinished = true
+	}
+	if (game.cash > Number.MAX_VALUE) {
+		if (!game.gameTrulyFinished) {
+			document.getElementById("gameTrulyFinishScreen").style.display = "block"
+			game.gameTrulyFinished = true
+		}
+		game.cash = Number.MAX_VALUE
 	}
 
 	updateCurrencies();

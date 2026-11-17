@@ -29,6 +29,7 @@ function initSave() {
 		ascensionPoints: 0,
 		ascensionCash: 0,
 		gameFinished: false,
+		gameTrulyFinished: false,
         minerSouls: 0,
         minerSoulTotal: 0,
         minerSoulPending: 1500,

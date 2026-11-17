@@ -71,12 +71,13 @@ function getToolCurrency(type, x) {
 }
 
 function loadToolScreenInfo(tool) {
-	if (tool) currentTool = tool;
 
 	if (tool == "comp" && game.level < 5) {
 		showPopup("Unlocks at level 5!")
 		return
 	}
+	
+	if (tool) currentTool = tool;
 
 	let level = getToolLevel(currentTool);
 	let name = getToolName(currentTool, level);

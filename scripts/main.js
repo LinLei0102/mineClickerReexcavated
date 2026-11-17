@@ -4,12 +4,15 @@ function loadGame(loadgame) {
 	game = deepCopy(loadgame, game);
 	
 	game.level = XPToLevel(Math.max(Math.floor(game.XP), 0))
-	document.getElementById("level").innerHTML = game.level
+	document.getElementById("level").innerHTML = format(game.level)
 	let XPToNextLevel = levelToXP(game.level + 1) - levelToXP(game.level)
 	let ProgressToNextLevel = (game.XP - levelToXP(game.level)).toFixed(1)
 	document.getElementById("XPBar").style.width = (ProgressToNextLevel / XPToNextLevel * 100) + "%"
+
 	updateSettings();
 	updateCurrencies();
+
+	time = game.lastSave;
 }
 
 
@@ -22,15 +25,16 @@ function tick() {
 	time += delta;
     delta /= 1000;
 
+	if (delta > 60)
+	{
+		attemptOfflineTime(delta);
+		return;
+	}
+
 	game.timePlayed += delta
 
 	if (document.getElementById("statsScreen").style.left == "0px") {
-		let timePlayedFloor = Math.floor(game.timePlayed)
-		let timePlayedHours = Math.floor(timePlayedFloor / 3600)
-		let timePlayedMinutes = Math.floor(timePlayedFloor / 60) % 60
-		let timePlayedSeconds = timePlayedFloor % 60
-		let timeString = (timePlayedHours + ":" + ((timePlayedMinutes < 10 ? '0' : '') + timePlayedMinutes) + ":" + ((timePlayedSeconds < 10 ? '0' : '') + timePlayedSeconds))
-		document.getElementById("timePlayed").innerHTML = timeString
+		document.getElementById("timePlayed").innerHTML = formatDuration(game.timePlayed)
 	}
 
 	if (game.level >= 5) {
@@ -88,6 +92,72 @@ function tick() {
     updateVisuals();
 
 	setTimeout(tick, 100);
+}
+
+function attemptOfflineTime(delta) {
+	game.timePlayed += delta;
+
+	let messages = []
+
+	if (game.level >= 5) {
+		function getStats() {
+			return {
+				cash: game.cash,
+				artifacts: game.artifacts,
+				level: game.level,
+				totalOresMined: game.totalOresMined,
+			}
+		}
+
+		let oldStats = getStats();
+
+		tapTimer += delta * game.tapSpeed;
+		if (tapTimer > 0) {
+			doIdleDamage(Math.floor(tapTimer));
+			tapTimer %= 1;
+		}
+
+		let newStats = getStats();
+		let statsDelta = Object.fromEntries(Object.keys(newStats).map(x => [x, newStats[x] - oldStats[x]]))
+
+		if (statsDelta.totalOresMined > 0)
+		{
+			let message = document.createElement("p");
+			message.style.textAlign = "start";
+			message.style.fontSize = "2.5vh";
+			message.append(`Your companion mined ${format(statsDelta.totalOresMined)} ores, generating $${format(statsDelta.cash)}`);
+			if (statsDelta.artifacts > 0) message.append(`, ${format(statsDelta.artifacts)} artifacts`);
+			if (statsDelta.level > 0) message.append(`, ${format(statsDelta.level)} levels`);
+
+			messages.push(message);
+		}
+	}
+
+    if (game.gameFinished) {
+		updateReincarnationGain();
+		var soulsPending = game.minerSoulRate * delta / 3600;
+        game.minerSoulPending += soulsPending;
+
+		let message = document.createElement("p");
+		message.style.textAlign = "start";
+		message.style.fontSize = "2.5vh";
+		message.append(`${format(soulsPending)} pending miner's souls became available in Reincarnation`);
+
+		messages.push(message);
+    }
+
+	if (!messages.length) return;
+
+	messages.unshift("While you're away:");
+
+	let title = document.createElement("h3");
+	title.style.margin = "0 0 1.5vh 0";
+	title.style.fontWeight = "normal";
+	title.style.color = "#ffb";
+	title.append(`You were away for ${formatDuration(delta)}`);
+	messages.unshift(title);
+
+	showPopup(...messages);
 }
 
 window.addEventListener("DOMContentLoaded", () => {

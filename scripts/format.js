@@ -34,6 +34,15 @@ function formatWhole(x, digits = 2) {
 	})
 }
 
+function formatDuration(seconds) {
+	let str = Math.floor(seconds % 60) + "s"
+	seconds /= 60; if (seconds < 1) return str
+	str = Math.floor(seconds % 60) + "m " + str
+	seconds /= 60; if (seconds < 1) return str
+	str = Math.floor(seconds) + "h " + str
+	return str
+}
+
 function romanize(x) {
 	if (isNaN(x))
 		return NaN;

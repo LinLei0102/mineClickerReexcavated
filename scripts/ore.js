@@ -249,7 +249,7 @@ function lastOre() {
 }
 
 function calculateDamage() {
-	game.damage = game.baseDamage = getToolDamage("tool") * getUpgradeEffect("normal", 10);
+	game.damage = game.baseDamage = getToolDamage("tool") * getUpgradeEffect("normal", 10) * getUpgradeEffect("normal", 24);
 	if (game.level >= 10) game.damage = game.damage * (1 + game.artifactBoost / 100)
 	if (game.level >= 100) game.damage = game.damage * (1 + game.ascensionPoints / 100);
 

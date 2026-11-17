@@ -151,6 +151,13 @@ function displayUpgrade(type, x) {
 	updateUpgrades();
 }
 
+function getUpgradeCost(type, id) {
+	let upgrade = upgrades[type]?.[id];
+	if (!upgrade || !upgrade.req()) return 0;
+	let amount = game.upgradesBought[type]?.[id] ?? 0;
+	return upgrade.cost(amount);
+}
+
 function buyUpgrade(type, id) {
 	if (!type) [type, id] = selectedUpgrade;
 	if (id == "$all") {
@@ -172,9 +179,7 @@ function buyUpgrade(type, id) {
 
 		if (selectedUpgrade) displayUpgrade(...selectedUpgrade)
 
-		if (type == "normal" && id == 1)         calculateDamage()
-		if (type == "normal" && id == 2)         calculateDamage()
-		if (type == "normal" && id == 10)        calculateDamage()
+		if (type == "normal" && [1, 2, 10, 24, 25, 26].includes(id))         calculateDamage()
 		else if (type == "normal" && id == 4)    game.artifactChance = getUpgradeEffect("normal", 4)
 
 		updateUpgrades();

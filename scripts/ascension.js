@@ -7,6 +7,8 @@ function openAscensionScreen() {
 		document.getElementById("ascensionPoints").innerHTML = format(game.ascensionPoints)
 		document.getElementById("reincarnationTabButton").style.display = game.gameFinished ? "" : "none"
 		updateAscensionGain();
+	} else {
+		showPopup("Unlocks at level 100!");
 	}
 }
 

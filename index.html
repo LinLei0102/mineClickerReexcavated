@@ -81,7 +81,7 @@
 				<div class="bottomButtons">
 					<div class="bottomButton" onclick="closeToolScreen()">Back</div>
 					<div class="bottomButton" onclick="loadToolScreenInfo('tool')">TOOL</div>
-					<div class="bottomButton" id="compButton" onclick="loadToolScreenInfo('comp')">COMP</div>
+					<div class="bottomButton" id="compButton" style="color: #777" onclick="loadToolScreenInfo('comp')">5</div>
 					<div class="bottomButton" id="autoScreenButton" onclick="showAutoScreen()">AUTO</div>
 				</div>
 			</div>
@@ -221,6 +221,13 @@
 					</p>
 					<div class="bottomButton" onclick="closeStatsScreen()">Back</div>
 				</div>
+			</div>
+			
+			<div id="popupScreen" style="display: none">
+				<div id="popupContent" style="font-size: 2.5vh"></div>
+				<center>
+					<button onclick="document.getElementById('popupScreen').style.display = 'none'">Okay</button>
+				</center>
 			</div>
 		</div>
 

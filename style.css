@@ -561,7 +561,7 @@ button:hover {
 	gap: 0.3em;
 }
 
-#gameFinishScreen, #gameTrulyFinishScreen {
+#gameFinishScreen, #gameTrulyFinishScreen, #popupScreen {
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -573,6 +573,15 @@ button:hover {
 	z-index: 3;
 	display: none;
 }
+
+#popupScreen {
+	display: flex;
+	flex-flow: column;
+	gap: 1em;
+	padding: 1em;
+	font-size: 2vh;
+}
+
 
 #autoScreen {
 	position: absolute;

@@ -77,9 +77,9 @@ function load() {
 function exportGame() {
   save()
   navigator.clipboard.writeText(btoa(JSON.stringify(game))).then(function() {
-    alert("Copied to clipboard!")
+    showPopup("Copied to clipboard!")
   }, function() {
-    alert("Error copying to clipboard, try again...")
+    showPopup("Error copying to clipboard, try again...")
   });
 }
 
@@ -92,7 +92,7 @@ function importGame() {
 		location.reload()
   }
   else {
-    alert("Invalid input.")
+    navigator("Invalid input.")
   }
 }
 

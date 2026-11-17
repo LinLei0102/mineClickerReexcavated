@@ -12,7 +12,9 @@ function openUpgradeScreen() {
         updateUpgrades();
 
         displayUpgrade(selectedUpgrade[0], selectedUpgrade[1])
-    }
+    } else {
+		showPopup("Unlocks at level 5!");
+	}
 }
 
 let upgradeButtons = {};

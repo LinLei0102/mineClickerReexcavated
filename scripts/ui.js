@@ -145,3 +145,9 @@ function adjustDivSize() {
     }
 }
 window.addEventListener('resize', adjustDivSize);
+
+function showPopup(...content) {
+	document.getElementById('popupContent').innerHTML = "";
+	document.getElementById('popupContent').append(...content);
+	document.getElementById('popupScreen').style.display = "";
+}

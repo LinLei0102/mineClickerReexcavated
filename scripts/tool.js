@@ -73,6 +73,11 @@ function getToolCurrency(type, x) {
 function loadToolScreenInfo(tool) {
 	if (tool) currentTool = tool;
 
+	if (tool == "comp" && game.level < 5) {
+		showPopup("Unlocks at level 5!")
+		return
+	}
+
 	let level = getToolLevel(currentTool);
 	let name = getToolName(currentTool, level);
 	let nextName = getToolName(currentTool, level + 1);
@@ -110,6 +115,10 @@ function loadToolScreenInfo(tool) {
 	if (game.level >= 10) {
 		document.getElementById("artifactBottomButton").style.color = "#860"
 		document.getElementById("artifactBottomButton").innerHTML = "Gilding"
+	}
+	if (game.level >= 5) {
+		document.getElementById("compButton").style.color = ""
+		document.getElementById("compButton").innerHTML = "COMP"
 	}
 	document.getElementById("artifactBottomButton").style.display = currentTool == "tool" ? "" : "none";
 

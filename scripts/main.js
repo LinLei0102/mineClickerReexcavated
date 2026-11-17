@@ -167,3 +167,7 @@ window.addEventListener("DOMContentLoaded", () => {
 	tick();
     if (!window.isDevVersion || true) setInterval(save, 5000)
 })
+
+window.addEventListener("error", (e) => {
+	alert(e.message + "\n" + e.filename + ":" + e.lineno + ":" + e.colno + "\n\nPlease contact the developer.")
+})

@@ -28,6 +28,7 @@ function tick() {
 	if (delta > 60)
 	{
 		attemptOfflineTime(delta);
+    	updateVisuals();
 		setTimeout(tick, 100);
 		return;
 	}

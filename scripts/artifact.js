@@ -34,7 +34,7 @@ function useArtifact() {
 		if (artifactBoost > maxBoost) {
 			if (getUpgradeEffect("reincarnation", 9)) {
 				let strength = getUpgradeEffect("reincarnation", "9a");
-				artifactBoost = (artifactBoost * maxBoost ** (1 + 1 / strength)) ** (strength) / maxBoost;
+				artifactBoost = (artifactBoost * maxBoost ** (strength)) ** (1 - strength);
 			} else {
 				artifactBoost = maxBoost;
 			}

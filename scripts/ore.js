@@ -361,7 +361,7 @@ function lootOre(times = 1) {
 	let isNewLevel = Decimal.neq(game.level, newLevel);
 	game.level = newLevel;
 	document.getElementById("level").innerHTML = format(game.level);
-	let XPToNextLevel = levelToXP(Decimal.add(game.level + 1)).sub(levelToXP(game.level))
+	let XPToNextLevel = levelToXP(Decimal.add(game.level, 1)).sub(levelToXP(game.level))
 	let ProgressToNextLevel = Decimal.sub(game.XP, levelToXP(game.level))
 	document.getElementById("XPBar").style.width = Decimal.div(ProgressToNextLevel, XPToNextLevel).mul(100) + "%";
 	if (isNewLevel) {

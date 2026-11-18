@@ -315,10 +315,10 @@ function dealDamage(damage, times = 1) {
 	let timesAlreadyHit = Decimal.sub(effectiveHitPoints, currentHitPoints).div(damage).floor();
 	if (timesAlreadyHit.add(times).gte(timesPerLoot)) {
 		lootOre(Math.floor(timesAlreadyHit.add(times).div(timesPerLoot)));
-		times = (times + timesAlreadyHit) % timesPerLoot;
+		times = Decimal.add(times, timesAlreadyHit).toNumber() % timesPerLoot;
 		currentHitPoints = Decimal.sub(stats.hitPoints, Decimal.mul(damage, times));
 	} else {
-		currentHitPoints -= Decimal.sub(currentHitPoints, Decimal.mul(damage, times));
+		currentHitPoints = Decimal.sub(currentHitPoints, Decimal.mul(damage, times));
 	}
 
 	document.getElementById("currentHitPoints").innerHTML = format(currentHitPoints)

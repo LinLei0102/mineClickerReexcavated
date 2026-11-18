@@ -11,6 +11,8 @@ function loadGame(loadgame) {
 	let ProgressToNextLevel = Decimal.sub(game.XP, levelToXP(game.level))
 	document.getElementById("XPBar").style.width = Decimal.div(ProgressToNextLevel, XPToNextLevel).mul(100) + "%";
 
+	calculateDamage();
+
 	time = game.lastSave;
 }
 

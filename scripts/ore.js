@@ -3,6 +3,7 @@ var currentLayer = 1
 var previousLayer = 1
 
 var timeSinceLevelUp = 0;
+var oneShotIdleDamage = 0;
 
 function getOreStats(x) {
 	let length = oreNames.length;
@@ -139,7 +140,7 @@ function updateOreDamageUI(stats) {
 		document.getElementById("currentNetGain").style.color = damage > 0 ? "" : "#f44";
 	}
 	{
-		let {damage, income, rate} = calculateOreDamage(game.currentOre, game.idleDamage, 
+		let {damage, income, rate, minDamage} = calculateOreDamage(game.currentOre, game.idleDamage, 
 			approximateFactorArray(
 				getUpgradeEffect("reincarnation", 8) ? Infinity : getUpgradeEffect("normal", 21),
 				getUpgradeEffect("normal", 15),
@@ -153,6 +154,7 @@ function updateOreDamageUI(stats) {
 		damage *= game.tapSpeed;
 		income *= game.tapSpeed;
 		income *= cashMulti;
+		oneShotIdleDamage = minDamage;
 
 		if (game.level > 5) {
 			switch(game.homeStat) {
@@ -204,6 +206,7 @@ function calculateOreDamage(ore, damage, critList = []) {
 	critList.unshift([1, 1]);
 	let result = {
 		damage: 0,
+		minDamage: 0,
 		rate: 0,
 		income: 0,
 	}
@@ -212,6 +215,7 @@ function calculateOreDamage(ore, damage, critList = []) {
 		let thisDamage = Math.max(damage * critList[i][1] - stats.hardness, 0)
 		result.damage += thisDamage * chance;
 		result.rate += 1 / Math.ceil(stats.hitPoints / thisDamage) * chance;
+		if (chance > 0 && result.minDamage <= 0) result.minDamage = thisDamage;
 	}
 	result.rate = 1 / result.rate;
 	result.income = stats.value / result.rate;
@@ -318,8 +322,9 @@ function dealDamage(damage, times = 1) {
 
 	document.getElementById("currentHitPoints").innerHTML = format(currentHitPoints)
 
-	if (game.auto.advance && game.activeDamage - stats.hardness >= stats.hitPoints * 4 ** (stats.transLevel + 1)) {
-		nextOre();
+	if (game.auto.advance) {
+		let nextStats = getOreStats(game.currentOre + 1);
+		if (oneShotIdleDamage > nextStats.hitPoints) nextOre();
 	}
 }
 

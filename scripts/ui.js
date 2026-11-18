@@ -16,14 +16,14 @@ function updateVisuals() {
 
     messageTime -= delta;
 	
-	if (game.level >= 5 || game.minerSoulTotal > 0) {
+	if (Decimal.gte(game.level, 5) || Decimal.gt(game.minerSoulTotal, 0)) {
 		document.getElementById("upgradeBottomButton").style.color = ""
 		document.getElementById("upgradeBottomButton").innerHTML = "UPG"
 	} else {
 		document.getElementById("upgradeBottomButton").style.color = "#777"
 		document.getElementById("upgradeBottomButton").innerHTML = "5"
     }
-	if (game.level >= 100 || game.minerSoulTotal > 0) {
+	if (Decimal.gte(game.level, 100) || Decimal.gt(game.minerSoulTotal, 0)) {
 		document.getElementById("ascensionBottomButton").style.color = "#60a"
 		document.getElementById("ascensionBottomButton").innerHTML = "ASC"
 	} else {
@@ -43,7 +43,7 @@ function updateCurrencies() {
 	document.getElementById("gildingScreenArtifacts").innerHTML = format(game.artifacts)
 	document.getElementById("artifactHolder").style.display 
 		= document.getElementById("upgradeArtifactHolder").style.display 
-		= game.level >= 10 && game.artifacts > 0 ? "" : "none";
+		= Decimal.gte(game.level, 10) && Decimal.gt(game.artifacts, 0) ? "" : "none";
 	
 	document.getElementById("toolScreenCash").innerHTML = getToolCurrency(currentTool)
 

@@ -20,18 +20,24 @@ function updateReincarnationGain() {
 	game.minerSoulRate = minerSoulBreakdown.base;
 
 	minerSoulBreakdown.transcend = Math.floor((game.minerSoulBestOre - 1) / oreNames.length);
-	minerSoulBreakdown.transcend = Math.floor(5 ** (minerSoulBreakdown.transcend - 1)) + 1;
-	game.minerSoulRate *= minerSoulBreakdown.transcend;
+	minerSoulBreakdown.transcend = Decimal.pow(5, minerSoulBreakdown.transcend - 1).add(1);
+	game.minerSoulRate = Decimal.mul(game.minerSoulRate, minerSoulBreakdown.transcend);
 
-	minerSoulBreakdown.cash = Math.log10(game.minerSoulCash + 1000) - 2;
-	game.minerSoulRate *= minerSoulBreakdown.cash;
+	minerSoulBreakdown.cash = Decimal.add(game.minerSoulCash, 1000).log10() - 2;
+	game.minerSoulRate = Decimal.mul(game.minerSoulRate, minerSoulBreakdown.cash);
 
-	minerSoulBreakdown.artifact = (Math.log2(game.minerSoulArtifacts + 1024) - 9) ** 1.5;
-	game.minerSoulRate *= minerSoulBreakdown.artifact;
+	minerSoulBreakdown.artifact = Decimal.pow(Decimal.add(game.minerSoulArtifacts, 1024).log2() - 9, 1.5);
+	game.minerSoulRate = Decimal.mul(game.minerSoulRate, minerSoulBreakdown.artifact);
 
-	if (getUpgradeEffect("reincarnation", 10)) {
-		minerSoulBreakdown.level = Math.max(1, game.level) ** getUpgradeEffect("reincarnation", 10);
-		game.minerSoulRate *= minerSoulBreakdown.level;
+	if (Decimal.gt(getUpgradeEffect("reincarnation", 10), 0)) {
+		minerSoulBreakdown.level = Decimal.max(1, game.level).pow(getUpgradeEffect("reincarnation", 10));
+		game.minerSoulRate = Decimal.mul(game.minerSoulRate, minerSoulBreakdown.level);
+	}
+
+	if (Decimal.gt(getUpgradeEffect("reincarnation", 12), 0)) {
+		minerSoulBreakdown.tailstart = (game.upgradesBought.normal?.[16] ?? 0) + (game.upgradesBought.normal?.[17] ?? 0) + (game.upgradesBought.normal?.[18] ?? 0) + 1
+		minerSoulBreakdown.tailstart = Decimal.max(minerSoulBreakdown.tailstart).pow(getUpgradeEffect("reincarnation", 12));
+		game.minerSoulRate = Decimal.mul(game.minerSoulRate, minerSoulBreakdown.tailstart);
 	}
 
 	minerSoulLastUpdated = Date.now();
@@ -57,7 +63,8 @@ function initReincarnationUI() {
 		"transcend": "Transcendence", 
 		"level": "Levels",
 		"cash": "Total cash", 
-		"artifact": "Total artifacts"
+		"artifact": "Total artifacts", 
+		"tailstart": "Headstart upg."
 	}
 	for (let item in items) {
 		let row = document.createElement("tr");
@@ -85,8 +92,8 @@ function cancelReincarnation() {
 
 function reincarnate() {
 	let minerSoulsToGain = Math.floor(game.minerSoulPending);
-	game.minerSouls += minerSoulsToGain;
-    game.minerSoulTotal += minerSoulsToGain;
+	game.minerSouls = Decimal.add(game.minerSouls , minerSoulsToGain);
+    game.minerSoulTotal = Decimal.add(game.minerSoulTotal, minerSoulsToGain);
 
 	game.cash = 0
 	game.XP = 0

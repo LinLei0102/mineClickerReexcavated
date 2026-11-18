@@ -22,7 +22,7 @@ function updateSettings() {
 		scientific: "Scientific",
 	}[game.numberFormat]
 
-	document.getElementById("homeStatButton").style.display = game.minerSoulTotal > 0 ? "" : "none";
+	document.getElementById("homeStatButton").style.display = Decimal.gt(game.minerSoulTotal, 0) ? "" : "none";
 	document.getElementById("homeStat").innerHTML = {
 		damage: "Damage",
 		breakRate: "Break rate",

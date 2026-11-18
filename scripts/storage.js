@@ -1,14 +1,16 @@
 
 function initSave() {
 	game = {
-		cash: 0,
-		XP: 0,
-		level: 1,
-		baseDamage: 1,
-		damage: 1,
-		idleDamage: 1,
-		activeDamage: 1,
+		cash: new Decimal(0),
+		XP: new Decimal(0),
+		level: new Decimal(0),
+
+		baseDamage: new Decimal(0),
+		damage: new Decimal(0),
+		idleDamage: new Decimal(0),
+		activeDamage: new Decimal(0),
 		tapSpeed: 0,
+
 		lastSave: Date.now(),
 		lastVisualUpdate: Date.now(),
 		totalOresMined: 0,
@@ -17,29 +19,35 @@ function initSave() {
 		homeStat: "damage",
 		messages: true,
 		evilMode: false,
+
 		unlockedOres: 1,
 		currentOre: 1,
 		currentTool: 1,
 		currentCompanion: 1,
 		upgradesBought: {},
-		artifacts: 0,
+
+		artifacts: new Decimal(0),
 		artifactChance: 0.05,
-		artifactBoost: 0,
-		artifactUsed: 0,
-		ascensionPoints: 0,
-		ascensionCash: 0,
+		artifactBoost: new Decimal(0),
+		artifactUsed: new Decimal(0),
+
+		ascensionPoints: new Decimal(0),
+		ascensionCash: new Decimal(0),
+
+        minerSouls: new Decimal(0),
+        minerSoulTotal: new Decimal(0),
+        minerSoulPending: new Decimal(0),
+        minerSoulRate: new Decimal(0),
+        minerSoulBestOre: 0,
+		minerSoulCash: new Decimal(0),
+		minerSoulArtifacts: new Decimal(0),
+
 		gameFinished: false,
 		gameTrulyFinished: false,
-        minerSouls: 0,
-        minerSoulTotal: 0,
-        minerSoulPending: 1500,
-        minerSoulRate: 0,
-        minerSoulBestOre: 0,
-		minerSoulCash: 0,
-		minerSoulArtifacts: 0,
 
 		auto: Object.fromEntries(Object.keys(autoFunctions).map(k => [k, false])),
 	}
+
 	for (let cat in upgrades) {
 		game.upgradesBought[cat] = {};
 		for (let id in upgrades[cat]) {
@@ -103,6 +111,9 @@ function deepCopy(from, to) {
 		}
 		else if ((typeof to[key]) == "number" && from[key] === null) {
 			continue;
+		}
+		else if (to[key] instanceof Decimal) {
+			to[key] = from[key] ?? to[key];
 		}
 		else if ((typeof(to[key])) == "object") {
 			to[key] = deepCopy(from[key], to[key])

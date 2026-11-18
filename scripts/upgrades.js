@@ -85,7 +85,7 @@ function updateUpgrades() {
 		let amount = game.upgradesBought[type]?.[id] ?? 0;
 		let cost = data.cost(amount);
 		let costType = data.costType || "cash";
-		let canBuy = game[costType] >= cost;
+		let canBuy = Decimal.gte(game[costType], cost);
 		upgradeButtons[type][id].classList.toggle("can-buy", canBuy);
 	}
 }
@@ -172,8 +172,8 @@ function buyUpgrade(type, id) {
 	let amount = game.upgradesBought[type]?.[id] ?? 0;
 	let cost = upgrade.cost(amount);
 	let costType = upgrade.costType || "cash";
-	if (game[costType] >= cost) {
-		game[costType] -= cost;
+	if (Decimal.gte(game[costType], cost)) {
+		game[costType] = Decimal.sub(game[costType], cost);
 
 		updateCurrencies()
 
@@ -181,7 +181,7 @@ function buyUpgrade(type, id) {
 
 		if (selectedUpgrade) displayUpgrade(...selectedUpgrade)
 
-		if (type == "normal" && [1, 2, 10, 24, 25, 26].includes(+id))         calculateDamage()
+		if (type == "normal" && [1, 2, 10].includes(+id))         calculateDamage()
 		else if (type == "normal" && id == 4)    game.artifactChance = getUpgradeEffect("normal", 4)
 
 		updateUpgrades();
@@ -193,6 +193,6 @@ function buyUpgrade(type, id) {
 function getCheapestUpgrade(type) {
 	return Object.entries(upgrades[type])
 		.filter(x => !x[0].startsWith("$") && (x[1].visible?.() ?? true) && x[1].req())
-		.map(([key, item]) => [key, item, item.cost(game.upgradesBought[type]?.[key] ?? 0) / game[item.costType ?? "cash"]])
-		.sort((a, b) => a[2] - b[2])[0];
+		.map(([key, item]) => [key, item, Decimal.div(item.cost(game.upgradesBought[type]?.[key] ?? 0), game[item.costType ?? "cash"])])
+		.sort((a, b) => Decimal.sub(a[2], b[2]).sign())[0];
 }

@@ -17,7 +17,7 @@ function getToolDamage(type, x) {
 		if (x < 33) {
 			return toolDamages[x - 1]
 		} else {
-			return 25 ** (x - 32) * toolDamages[32]
+			return Decimal.pow(25, (x - 32)).mul(toolDamages[32])
 		}
 	} else if (type == "comp") {
 		if (x <= compDamages.length) {
@@ -35,13 +35,13 @@ function getToolCost(type, x) {
 		if (x < 33) {
 			return toolCosts[x - 1] * getUpgradeEffect("normal", 8)
 		} else {
-			return (x * 1000) ** (x - 33) * toolCosts[32] * getUpgradeEffect("normal", 8)
+			return Decimal.pow(x * 1000, x - 33).mul(toolCosts[32]).mul(getUpgradeEffect("normal", 8))
 		}
 	} else if (type == "comp") {
 		if (x <= compCosts.length) {
 			return compCosts[x - 1]
 		} else {
-			return x ** (x - compCosts.length) * compCosts[compCosts.length - 1]
+			return Decimal.pow(x, x - compCosts.length).mul(compCosts[compCosts.length - 1])
 		}
 	}
 }
@@ -113,7 +113,7 @@ function loadToolScreenInfo(tool) {
 	
 	updateCurrencies()
 
-	if (game.level >= 10) {
+	if (Decimal.gte(game.level, 10)) {
 		document.getElementById("artifactBottomButton").style.color = "#860"
 		document.getElementById("artifactBottomButton").innerHTML = "Gilding"
 
@@ -122,7 +122,7 @@ function loadToolScreenInfo(tool) {
 	}
 	document.getElementById("artifactBottomButton").style.display = currentTool == "tool" ? "" : "none";
 
-	document.getElementById("autoScreenButton").style.display = game.minerSoulTotal >= 1e4 ? "" : "none";
+	document.getElementById("autoScreenButton").style.display = Decimal.gte(game.minerSoulTotal, 1e4) ? "" : "none";
 }
 
 function closeToolScreen() {
@@ -134,8 +134,8 @@ function upgradeTool (tool) {
 	tool ??= currentTool;
 	let toolCost = 0
 	toolCost = getToolCost(tool)
-	if (tool == "tool" && game.cash >= toolCost) {
-		game.cash -= toolCost
+	if (tool == "tool" && Decimal.gte(game.cash, toolCost)) {
+		game.cash = Decimal.sub(game.cash, toolCost)
 
 		updateCurrencies()
 
@@ -145,9 +145,8 @@ function upgradeTool (tool) {
 
 		if (tool == currentTool) loadToolScreenInfo()
 		calculateDamage()
-	} else if (tool == "comp" && game.artifacts >= toolCost) {
-		game.artifacts -= toolCost
-
+	} else if (tool == "comp" && Decimal.gte(game.artifacts, toolCost)) {
+		game.artifacts = Decimal.sub(game.artifacts, toolCost)
 		game.currentCompanion++
 
 		if (tool == currentTool) loadToolScreenInfo()

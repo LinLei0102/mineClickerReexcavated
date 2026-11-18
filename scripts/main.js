@@ -2,15 +2,14 @@
 
 function loadGame(loadgame) {
 	game = deepCopy(loadgame, game);
-	
-	game.level = XPToLevel(Math.max(Math.floor(game.XP), 0))
-	document.getElementById("level").innerHTML = format(game.level)
-	let XPToNextLevel = levelToXP(game.level + 1) - levelToXP(game.level)
-	let ProgressToNextLevel = (game.XP - levelToXP(game.level)).toFixed(1)
-	document.getElementById("XPBar").style.width = (ProgressToNextLevel / XPToNextLevel * 100) + "%"
 
 	updateSettings();
 	updateCurrencies();
+
+	document.getElementById("level").innerHTML = format(game.level);
+	let XPToNextLevel = levelToXP(Decimal.add(game.level + 1)).sub(levelToXP(game.level))
+	let ProgressToNextLevel = Decimal.sub(game.XP, levelToXP(game.level))
+	document.getElementById("XPBar").style.width = Decimal.div(ProgressToNextLevel, XPToNextLevel).mul(100) + "%";
 
 	time = game.lastSave;
 }
@@ -34,12 +33,25 @@ function tick() {
 	}
 
 	game.timePlayed += delta
+	let hasAuto = false;
 
 	if (document.getElementById("statsScreen").style.left == "0px") {
 		document.getElementById("timePlayed").innerHTML = formatDuration(game.timePlayed)
 	}
 
-	if (game.level >= 5) {
+	if (getUpgradeEffect("reincarnation", "11a")) {
+		if (ascensionPointLastUpdated == 0 || time - ascensionPointLastUpdated > 1000) {
+			let ascensionPointsToGet = Decimal.mul(getPendingAscensionPoints(), getUpgradeEffect("reincarnation", "11a"))
+				.mul(ascensionPointLastUpdated ? (time - ascensionPointLastUpdated) / 1000 : delta);
+			game.ascensionPoints = Decimal.add(game.ascensionPoints, ascensionPointsToGet)
+			ascensionPointLastUpdated = time;
+			document.getElementById("ascensionPoints").innerHTML = format(game.ascensionPoints);
+			calculateDamage();
+			hasAuto = true;
+		} 
+	}
+
+	if (Decimal.gte(game.level, 5)) {
 		tapTimer += delta * game.tapSpeed;
 
 		if (tapTimer > 0) {
@@ -62,21 +74,18 @@ function tick() {
 				hasAuto = true;
 				upgradeTool("comp");
 			}
-			if (game.auto.artifact && (getUpgradeEffect("reincarnation", 9) || game.artifactBoost < getUpgradeEffect("normal", 5) * getUpgradeEffect("normal", 6))) {
+			if (game.auto.artifact && (Decimal.gt(getUpgradeEffect("reincarnation", 9), 0) || Decimal.lt(game.artifactBoost, Decimal.mul(getUpgradeEffect("normal", 5), getUpgradeEffect("normal", 6))))) {
 				hasAuto = true;
 				useArtifact();
 			}
-
-			if (hasAuto) {
-				updateOreDamageUI();
-			}
 		}
-        game.minerSoulPending += game.minerSoulRate * delta / 3600;
+
+		let soulsPending = Decimal.mul(game.minerSoulRate, delta / 3600);
+        game.minerSoulPending = Decimal.add(game.minerSoulPending, soulsPending);
     }
 	if (game.auto.upgrade) {
-		let rate = Math.log10(game.level + 10);
+		let rate = Decimal.add(game.level, 10).log10();
 		autoUpgradeTime += rate * delta;
-		let hasAuto = false;
 		while (rate >= 1) {
 			if (buyUpgrade("normal", "$all")) {
 				hasAuto = true;
@@ -85,10 +94,10 @@ function tick() {
 				rate %= 1;
 			}
 		}
+	}
 
-		if (hasAuto) {
-			updateOreDamageUI();
-		}
+	if (hasAuto) {
+		updateOreDamageUI();
 	}
 
     updateVisuals();
@@ -101,7 +110,7 @@ function attemptOfflineTime(delta) {
 
 	let messages = []
 
-	if (game.level >= 5) {
+	if (Decimal.gte(game.level, 5)) {
 		function getStats() {
 			return {
 				cash: game.cash,
@@ -120,7 +129,7 @@ function attemptOfflineTime(delta) {
 		}
 
 		let newStats = getStats();
-		let statsDelta = Object.fromEntries(Object.keys(newStats).map(x => [x, newStats[x] - oldStats[x]]))
+		let statsDelta = Object.fromEntries(Object.keys(newStats).map(x => [x, Decimal.sub(newStats[x], oldStats[x])]))
 
 		if (statsDelta.totalOresMined > 0)
 		{
@@ -135,10 +144,20 @@ function attemptOfflineTime(delta) {
 		}
 	}
 
+	if (getUpgradeEffect("reincarnation", "11a")) {
+		let ascensionPointsToGet = Decimal.mul(getPendingAscensionPoints(), getUpgradeEffect("reincarnation", "11a")).mul(delta)
+		game.ascensionPoints = Decimal.add(game.ascensionPoints, ascensionPointsToGet)
+
+		let message = document.createElement("p");
+		message.style.textAlign = "start";
+		message.style.fontSize = "2.5vh";
+		message.append(`${format(ascensionPointsToGet)} AP got passively generated`);
+	}
+
     if (game.gameFinished) {
 		updateReincarnationGain();
-		var soulsPending = game.minerSoulRate * delta / 3600;
-        game.minerSoulPending += soulsPending;
+		let soulsPending = Decimal.mul(game.minerSoulRate, delta / 3600);
+        game.minerSoulPending = Decimal.add(game.minerSoulPending, soulsPending);
 
 		let message = document.createElement("p");
 		message.style.textAlign = "start";
@@ -154,6 +173,7 @@ function attemptOfflineTime(delta) {
 
 	let title = document.createElement("h3");
 	title.style.margin = "0 0 1.5vh 0";
+	title.style.fontSize = "4vh";
 	title.style.fontWeight = "normal";
 	title.style.color = "#ffb";
 	title.append(`You were away for ${formatDuration(delta)}`);

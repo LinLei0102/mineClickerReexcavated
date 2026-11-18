@@ -19,9 +19,9 @@ function getOreStats(x) {
 		transLevel: rec,
 		icon: index + 1,
 		name: name,
-		value: oreValues[index] ** (rec + 1) * (oreValues[length - 1] * 7) ** factor,
-		hitPoints: oreHitPoints[index] ** (rec + 1) * (oreHitPoints[length - 1] / 7) ** factor,
-		hardness: Math.max(oreHardnesses[index], (index + 1) * rec / 100) * (oreHitPoints[index] ** rec) * ((oreHitPoints[length - 1] / 7) ** (factor)),
+		value: Decimal.pow(oreValues[index], rec + 1).mul(Decimal.pow(oreValues[length - 1] * 7, factor)),
+		hitPoints: Decimal.pow(oreHitPoints[index], rec + 1).mul(Decimal.pow(oreHitPoints[length - 1] / 7, factor)),
+		hardness: Decimal.max(oreHardnesses[index], (index + 1) * rec / 100).mul(Decimal.pow(oreHitPoints[index], rec)).mul(Decimal.pow(oreHitPoints[length - 1] / 7, factor)),
 	}
 }
 
@@ -110,18 +110,18 @@ function updateOreDamageUI(stats) {
 				5
 			)
 		);
-		income *= cashMulti;
+		income = Decimal.mul(income, cashMulti);
 
 		switch(game.homeStat) {
 			case "breakRate": 
 				if (rate <= 1) {
 					rate = 1 / rate;
 					document.getElementById("currentDamage").innerHTML = 
-						rate >= 1000 ? format(rate) : formatWhole(rate, 2);
+						Decimal.gte(rate, 1000) ? format(rate) : formatWhole(rate, 2);
 					document.getElementById("currentActiveStat").innerHTML = "breaks / tap";
 				} else {
 					document.getElementById("currentDamage").innerHTML = 
-						rate >= 1000 ? format(rate) : formatWhole(rate, 2);
+						Decimal.gte(rate, 1000) ? format(rate) : formatWhole(rate, 2);
 					document.getElementById("currentActiveStat").innerHTML = "taps / break";
 				}
 				break;
@@ -130,14 +130,14 @@ function updateOreDamageUI(stats) {
 				document.getElementById("currentDamage").innerHTML = format(damage);
 		}
 			
-		if (getUpgradeEffect("normal", 14) > 0) document.getElementById("currentDamage").prepend("~")
+		if (getUpgradeEffect("normal", 14) > 0 && Decimal.gt(damage, 0)) document.getElementById("currentDamage").prepend("~")
 
-		let netGain = "$" + (income > 1000 ? format(income) : formatWhole(income, 2))
-		if (cashMulti > 1 && damage > 0) netGain = "~" + netGain;
+		let netGain = "$" + (Decimal.gte(income, 1000) ? format(income) : formatWhole(income, 2))
+		if (Decimal.gt(cashMulti, 1) && Decimal.gt(damage, 0)) netGain = "~" + netGain;
 		document.getElementById("currentNetGain").innerHTML = netGain
 
 		document.getElementById("currentDamage").style.color = 
-		document.getElementById("currentNetGain").style.color = damage > 0 ? "" : "#f44";
+		document.getElementById("currentNetGain").style.color = Decimal.gt(damage, 0) ? "" : "#f44";
 	}
 	{
 		let {damage, income, rate, minDamage} = calculateOreDamage(game.currentOre, game.idleDamage, 
@@ -150,23 +150,22 @@ function updateOreDamageUI(stats) {
 			)
 		);
 
-		rate /= game.tapSpeed;
-		damage *= game.tapSpeed;
-		income *= game.tapSpeed;
-		income *= cashMulti;
+		rate = Decimal.div(rate, game.tapSpeed);
+		damage = Decimal.mul(damage, game.tapSpeed);
+		income = Decimal.mul(income, game.tapSpeed).mul(cashMulti);
 		oneShotIdleDamage = minDamage;
 
-		if (game.level > 5) {
+		if (Decimal.gte(game.level, 5)) {
 			switch(game.homeStat) {
 				case "breakRate": 
 					if (rate <= 1) {
 						rate = 1 / rate;
 						document.getElementById("currentIdleDamage").innerHTML = 
-							rate >= 1000 ? format(rate) : formatWhole(rate, 2);
+							Decimal.gte(rate, 1000) ? format(rate) : formatWhole(rate, 2);
 						document.getElementById("currentIdleStat").innerHTML = "breaks / sec";
 					} else {
 						document.getElementById("currentIdleDamage").innerHTML = 
-							rate >= 1000 ? format(rate) : formatWhole(rate, 2);
+							Decimal.gte(rate, 1000) ? format(rate) : formatWhole(rate, 2);
 						document.getElementById("currentIdleStat").innerHTML = "secs / break";
 					}
 					break;
@@ -175,10 +174,10 @@ function updateOreDamageUI(stats) {
 					document.getElementById("currentIdleDamage").innerHTML = format(damage);
 			}
 			
-			if (getUpgradeEffect("normal", 15) > 0) document.getElementById("currentIdleDamage").prepend("~")
+			if (getUpgradeEffect("normal", 15) > 0 && Decimal.gt(damage, 0)) document.getElementById("currentIdleDamage").prepend("~")
 			
-			let netGain = "$" + (income > 1000 ? format(income) : formatWhole(income, 2))
-			if (cashMulti > 1 && damage > 0) netGain = "~" + netGain
+			let netGain = "$" + (Decimal.gte(income, 1000) ? format(income) : formatWhole(income, 2))
+			if (Decimal.gt(cashMulti, 1) && Decimal.gt(damage, 0)) netGain = "~" + netGain;
 			document.getElementById("currentIdleGain").innerHTML = netGain
 		
 			document.getElementById("currentIdle").style.display = "";
@@ -187,17 +186,17 @@ function updateOreDamageUI(stats) {
 		}
 
 		document.getElementById("currentIdleDamage").style.color = 
-		document.getElementById("currentIdleGain").style.color = damage > 0 ? "" : "#f44"
+		document.getElementById("currentIdleGain").style.color = Decimal.gt(damage, 0) ? "" : "#f44"
 	}
 }
 
 function calculateFactorSum(critList) {
-	let sum = 0;
+	let sum = new Decimal(0);
 	critList.unshift([1, 1]);
 	for (let i = 0; i < critList.length; i++) {
 		let chance = critList[i][0] - (+critList[i+1]?.[0] || 0)
 		let thisValue = critList[i][1]
-		sum += thisValue * chance;
+		sum = Decimal.mul(thisValue, chance).add(sum);
 	}
 	return sum;
 }
@@ -205,20 +204,20 @@ function calculateOreDamage(ore, damage, critList = []) {
 	let stats = getOreStats(ore);
 	critList.unshift([1, 1]);
 	let result = {
-		damage: 0,
-		minDamage: 0,
-		rate: 0,
-		income: 0,
+		damage: new Decimal(0),
+		minDamage: new Decimal(0),
+		rate: new Decimal(0),
+		income: new Decimal(0),
 	}
 	for (let i = 0; i < critList.length; i++) {
 		let chance = critList[i][0] - (+critList[i+1]?.[0] || 0)
-		let thisDamage = Math.max(damage * critList[i][1] - stats.hardness, 0)
-		result.damage += thisDamage * chance;
-		result.rate += 1 / Math.ceil(stats.hitPoints / thisDamage) * chance;
-		if (chance > 0 && result.minDamage <= 0) result.minDamage = thisDamage;
+		let thisDamage = Decimal.mul(damage, critList[i][1]).sub(stats.hardness).max(0)
+		result.damage = Decimal.mul(thisDamage, chance).add(result.damage);
+		result.rate = Decimal.div(stats.hitPoints, thisDamage).ceil().reciprocate().mul(chance).add(result.rate);
+		if (chance > 0 && Decimal.lte(result.minDamage, 0)) result.minDamage = thisDamage;
 	}
-	result.rate = 1 / result.rate;
-	result.income = stats.value / result.rate;
+	result.rate = result.rate.reciprocate();
+	result.income = Decimal.div(stats.value, result.rate);
 	return result;
 }
 
@@ -253,38 +252,40 @@ function lastOre() {
 }
 
 function calculateDamage() {
-	game.damage = game.baseDamage = getToolDamage("tool") * getUpgradeEffect("normal", 10) * getUpgradeEffect("normal", 24);
-	if (game.level >= 10) game.damage = game.damage * (1 + game.artifactBoost / 100)
-	if (game.level >= 100) game.damage = game.damage * (1 + game.ascensionPoints / 100);
+	game.damage = game.baseDamage = Decimal.mul(getToolDamage("tool"), getUpgradeEffect("normal", 10));
+	game.damage = Decimal.div(game.artifactBoost, 100).add(1).mul(game.damage)
+	game.damage = Decimal.div(game.ascensionPoints, 100).add(1).mul(game.damage);
 
-	game.activeDamage = game.idleDamage = game.damage;
-
-	game.activeDamage *= getUpgradeEffect("normal", 1)
+	game.activeDamage = Decimal.mul(game.damage, getUpgradeEffect("normal", 1))
 	game.activeDamage = Math.round(game.activeDamage)
 	
-	game.idleDamage *= getUpgradeEffect("normal", 2)
+	game.idleDamage = Decimal.mul(game.damage, getUpgradeEffect("normal", 2))
 	game.idleDamage = Math.round(game.idleDamage)
 
-	game.tapSpeed = game.level >= 5 ? getToolDamage("comp") : 0;
+	game.tapSpeed = Decimal.gte(game.level, 5) ? getToolDamage("comp") : 0;
 }
 
 function mineOre() {
 	let damage = game.activeDamage;
-	let factor = 1;
+	let factors = doFactors(
+		1,
+		getUpgradeEffect("normal", 14),
+		getUpgradeEffect("normal", "20a"),
+		getUpgradeEffect("reincarnation", 7) ? Infinity : getUpgradeEffect("normal", 20)
+	)
+
 	let stack = 0;
-	let stackLimit = getUpgradeEffect("reincarnation", 7) ? Infinity : getUpgradeEffect("normal", 20);
-	let chance = getUpgradeEffect("normal", 14);
-	let chanceDecay = 1 - getUpgradeEffect("normal", "20a");
-	while (stack < stackLimit && Math.random() < chance) {
-		factor *= 5
-		chance *= chanceDecay;
-		stack++;
+	let factor = new Decimal(0);
+	for (let f in factors) {
+		factor = Decimal.pow(5, f).mul(factors[f]).add(factor);
+		if (factors[f] > 0) stack = Math.max(stack, f);
 	}
+	
 	if (stack) {
 		setMessage(1,"Critical hit!" + (stack > 1 ? " x" + format(stack) : ""));
 		flash("currentHitPoints", "#f88");
 	}
-	dealDamage(damage * factor);
+	dealDamage(Decimal.mul(damage, factor));
 }
 
 function doIdleDamage(times) {
@@ -299,32 +300,32 @@ function doIdleDamage(times) {
 	)
 	for (let factor in factors) {
 		factorTimes = factors[factor];
-		dealDamage(damage * 25 ** factor, factorTimes);
+		dealDamage(Decimal.pow(25, factor).mul(damage), factorTimes);
 		maxFactor = Math.max(maxFactor, factor);
 	}
 }
 
 function dealDamage(damage, times = 1) {
 	let stats = getOreStats(game.currentOre);
-	damage -= stats.hardness;
-	if (damage <= 0) return;
+	damage = Decimal.sub(damage, stats.hardness);
+	if (Decimal.lte(damage, 0)) return;
 
-	let timesPerLoot = Math.ceil(stats.hitPoints / damage);
-	let effectiveHitPoints = damage * timesPerLoot;
-	let timesAlreadyHit = Math.floor((effectiveHitPoints - currentHitPoints) / damage);
-	if (times + timesAlreadyHit >= timesPerLoot) {
-		lootOre(Math.floor((times + timesAlreadyHit) / timesPerLoot));
+	let timesPerLoot = Decimal.div(stats.hitPoints, damage).ceil();
+	let effectiveHitPoints = Decimal.mul(damage, timesPerLoot);
+	let timesAlreadyHit = Decimal.sub(effectiveHitPoints, currentHitPoints).div(damage).floor();
+	if (timesAlreadyHit.add(times).gte(timesPerLoot)) {
+		lootOre(Math.floor(timesAlreadyHit.add(times).div(timesPerLoot)));
 		times = (times + timesAlreadyHit) % timesPerLoot;
-		currentHitPoints = stats.hitPoints - damage * times;
+		currentHitPoints = Decimal.sub(stats.hitPoints, Decimal.mul(damage, times));
 	} else {
-		currentHitPoints -= damage * times;
+		currentHitPoints -= Decimal.sub(currentHitPoints, Decimal.mul(damage, times));
 	}
 
 	document.getElementById("currentHitPoints").innerHTML = format(currentHitPoints)
 
 	if (game.auto.advance) {
 		let nextStats = getOreStats(game.currentOre + 1);
-		if (oneShotIdleDamage > nextStats.hitPoints) nextOre();
+		if (Decimal.gte(oneShotIdleDamage, nextStats.hitPoints)) nextOre();
 	}
 }
 
@@ -342,29 +343,27 @@ function lootOre(times = 1) {
 	let cashGain = 0, artifactGain = 0;
 	let cashFactorEffect = getUpgradeEffect("normal", "9a")
 	for (let factor in factors) {
-		cashGain += cashFactorEffect ** factor * factors[factor];
-		artifactGain += getArtifactGain(factor) * factors[factor];
+		cashGain = Decimal.pow(cashFactorEffect, factor).mul(factors[factor]).add(cashGain);
+		artifactGain = Decimal.mul(getArtifactGain(factor), factors[factor]);
 		if (factors[factor] > 0) maxFactor = Math.max(maxFactor, factor);
 	}
-	cashGain *= stats.value * getUpgradeEffect("reincarnation", 1);
+	cashGain = Decimal.mul(cashGain, stats.value).mul(getUpgradeEffect("reincarnation", 1));
 
-	game.cash += cashGain;
-	game.ascensionCash += cashGain;
-	if (game.ascensionCash > Number.MAX_VALUE) game.ascensionCash = Number.MAX_VALUE;
-	game.minerSoulCash += cashGain;
-	if (game.minerSoulCash > Number.MAX_VALUE) game.minerSoulCash = Number.MAX_VALUE;
+	game.cash = Decimal.add(game.cash, cashGain);
+	game.ascensionCash = Decimal.add(game.ascensionCash, cashGain);
+	game.minerSoulCash = Decimal.add(game.minerSoulCash, cashGain);
 	if (maxFactor > 0) setMessage(2, "Ore duplicated!" + (maxFactor > 1 ? " x" + format(maxFactor) : ""))
 	flash("cash", levelToColour(maxFactor))
 
 	game.totalOresMined += times;
-	game.XP += 1.2 ** (game.currentOre-1) / 1.3 * times;
-	let newLevel = XPToLevel(Math.max(Math.floor(game.XP), 0));
-	let isNewLevel = game.level != newLevel;
+	game.XP = Decimal.add(game.XP, Decimal.pow(1.2, game.currentOre-1).div(1.3).mul(times));
+	let newLevel = XPToLevel(game.XP);
+	let isNewLevel = Decimal.neq(game.level, newLevel);
 	game.level = newLevel;
 	document.getElementById("level").innerHTML = format(game.level);
-	let XPToNextLevel = levelToXP(game.level + 1) - levelToXP(game.level)
-	let ProgressToNextLevel = (game.XP - levelToXP(game.level)).toFixed(1)
-	document.getElementById("XPBar").style.width = (ProgressToNextLevel / XPToNextLevel * 100) + "%";
+	let XPToNextLevel = levelToXP(Decimal.add(game.level + 1)).sub(levelToXP(game.level))
+	let ProgressToNextLevel = Decimal.sub(game.XP, levelToXP(game.level))
+	document.getElementById("XPBar").style.width = Decimal.div(ProgressToNextLevel, XPToNextLevel).mul(100) + "%";
 	if (isNewLevel) {
 		document.getElementById("XPBar").animate([
 			{ filter: "grayscale(1) brightness(1.5)", width: "100%", left: "0", easing: "cubic-bezier(.2, .8, .2, .8)" },
@@ -379,32 +378,25 @@ function lootOre(times = 1) {
 	if (game.currentOre >= game.unlockedOres) {
 		game.unlockedOres++;
 		game.minerSoulBestOre = Math.max(game.minerSoulBestOre, game.unlockedOres);
-		if (game.level >= 10) {
-			artifactGain *= getUpgradeEffect("normal", 23);
-			game.artifacts += artifactGain;
-			game.minerSoulArtifacts += artifactGain;
+		if (Decimal.gte(game.level, 10)) {
+			artifactGain = Decimal.mul(artifactGain, getUpgradeEffect("normal", 23));
+			game.artifacts = Decimal.add(game.artifacts, artifactGain);
+			game.minerSoulArtifacts = Decimal.add(game.minerSoulArtifacts, artifactGain);
 			setMessage(1,"Found an artifact!" + (maxFactor > 1 ? " x" + format(maxFactor) : ""))
 			flash("artifacts", "#ff8");
 		}
 		document.getElementById("arrowRight").style.display = "block"
 		document.getElementById("arrowSkipRight").style.display = "block"
 	}
-	else if (game.level >= 10 && Math.random() < game.artifactChance) {
-		game.artifacts += artifactGain;
-		game.minerSoulArtifacts += artifactGain;
+	else if (Decimal.gte(game.level, 10) && Math.random() < game.artifactChance) {
+		game.artifacts = Decimal.add(game.artifacts, artifactGain);
+		game.minerSoulArtifacts = Decimal.add(game.minerSoulArtifacts, artifactGain);
 		setMessage(1,"Found an artifact!" + (maxFactor > 1 ? " x" + format(maxFactor) : ""))
 		flash("artifacts", "#ff8");
 	}
 	if (game.currentOre == 78 && !game.gameFinished) {
 		document.getElementById("gameFinishScreen").style.display = "block"
 		game.gameFinished = true
-	}
-	if (game.cash > Number.MAX_VALUE) {
-		if (!game.gameTrulyFinished) {
-			document.getElementById("gameTrulyFinishScreen").style.display = "block"
-			game.gameTrulyFinished = true
-		}
-		game.cash = Number.MAX_VALUE
 	}
 
 	updateCurrencies();
@@ -419,7 +411,7 @@ function approximateFactorArray(cap, chanceBase, chanceDecay, factor, minChance 
 	{
 		array.push([
 			chance *= Math.min(1, chanceBase * (1 - chanceDecay) ** stack), 
-			factor ** stack
+			Decimal.pow(factor, stack)
 		]);
 		stack++;
 	}

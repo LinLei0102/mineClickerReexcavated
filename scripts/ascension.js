@@ -1,4 +1,4 @@
-
+let ascensionPointLastUpdated = 0;
 
 function openAscensionScreen() {
 	if (game.level >= 100 || game.minerSoulTotal > 0) {
@@ -12,13 +12,20 @@ function openAscensionScreen() {
 	}
 }
 
+function getPendingAscensionPoints() {
+	let ascensionPointMulti = getUpgradeEffect("normal", 7);
+	let ascensionPointsToGet = Decimal.pow(game.ascensionCash, 0.12).mul(5).mul(ascensionPointMulti).floor()
+	if (!getUpgradeEffect("reincarnation", 11)) ascensionPointsToGet = Decimal.sub(ascensionPointsToGet, game.ascensionPoints).max(0)
+	return ascensionPointsToGet;
+}
+
 function updateAscensionGain() {
 	let ascensionPointMulti = getUpgradeEffect("normal", 7);
-	let ascensionPointsToGet = Math.floor(game.ascensionCash ** 0.12 * 5 * ascensionPointMulti)
-	ascensionPointsToGet = Math.max(ascensionPointsToGet - game.ascensionPoints, 0)
+	ascensionPointsToGet = getPendingAscensionPoints()
 	document.getElementById("ascensionPointsToGet").innerHTML = format(ascensionPointsToGet)
-	let nextAscensionPoint = (game.ascensionPoints + ascensionPointsToGet + 1) / ascensionPointMulti
-	nextAscensionPoint = Math.floor((nextAscensionPoint / 5) ** (1/0.12))
+	let nextAscensionPoint = ascensionPointsToGet
+	if (!getUpgradeEffect("reincarnation", 11)) nextAscensionPoint = nextAscensionPoint.add(game.ascensionPoints);
+	nextAscensionPoint = nextAscensionPoint.add(1).div(ascensionPointMulti).div(5).pow(1/0.12).floor()
 	document.getElementById("nextAscensionPoint").innerHTML = "$" + format(nextAscensionPoint)
 }
 
@@ -35,10 +42,9 @@ function cancelAscension() {
 }
 
 function ascend() {
-	let ascensionPointsToGet = Math.floor(game.ascensionCash ** 0.12 * 5)
-	ascensionPointsToGet = ascensionPointsToGet * getUpgradeEffect("normal", 7)
-	ascensionPointsToGet = Math.max(ascensionPointsToGet - game.ascensionPoints, 0)
-	game.ascensionPoints += ascensionPointsToGet
+	let ascensionPointsToGet = getPendingAscensionPoints()
+
+	game.ascensionPoints = Decimal.add(game.ascensionPoints, ascensionPointsToGet)
 	game.currentOre = 1
 	game.cash = getUpgradeEffect("normal", 18)
 	game.ascensionCash = 0

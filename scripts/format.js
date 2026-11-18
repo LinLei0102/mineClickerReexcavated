@@ -1,34 +1,36 @@
 
 
 function format(x,forceLargeFormat=false) {
-	if (!Number.isFinite(x)) {return x.toLocaleString("en-US")}
-	if (!forceLargeFormat && x < 1e6) return Math.floor(x).toLocaleString("en-US");
+	x = new Decimal(x)
+	if (!Number.isFinite(x.exponent)) {return x.toLocaleString("en-US")}
+	if (Math.abs(x.exponent) >= 9e15) {return "∞"}
+	if (!forceLargeFormat && Decimal.lt(x, 1e6)) return Math.floor(+x).toLocaleString("en-US");
 	
-	let exponent = Math.floor(Math.log10(x))
+	let exponent = Math.floor(Decimal.log10(x))
 
 	if (game.numberFormat == "standard") {
 		let illionIndex = Math.floor(exponent / 3);
 		if (illionsShort[illionIndex-1])
-			return formatSig(x/(1000**illionIndex), 5) + " " + illionsShort[illionIndex-1]
+			return formatSig(x.div(Decimal.pow(1000, illionIndex)), 5) + " " + illionsShort[illionIndex-1]
 	}
 	if (game.numberFormat == "standardLong") {
 		let illionIndex = Math.floor(exponent / 3);
 		if (illions[illionIndex-1])
-			return formatSig(x/(1000**illionIndex), 3) + " " + illions[illionIndex-1]
+			return formatSig(x.div(Decimal.pow(1000, illionIndex)), 3) + " " + illions[illionIndex-1]
 	}
 		
-	return formatSig(Math.floor(x/(10**exponent)*10000)/10000, 5) + "e" + exponent
+	return formatSig(Math.floor(x.div(Decimal.pow(10, exponent))*10000)/10000, 5) + "e" + exponent
 }
 
 function formatSig(x, digits = 2) {
-	return x.toLocaleString("en-US", {
+	return (+x).toLocaleString("en-US", {
 		minimumSignificantDigits: digits,
 		maximumSignificantDigits: digits,
 	})
 }
 
 function formatWhole(x, digits = 2) {
-	return x.toLocaleString("en-US", {
+	return (+x).toLocaleString("en-US", {
 		minimumFractionDigits: digits,
 		maximumFractionDigits: digits,
 	})
@@ -44,8 +46,8 @@ function formatDuration(seconds) {
 }
 
 function romanize(x) {
-	if (isNaN(x))
-		return NaN;
+	x = +x
+	if (!Number.isFinite(x)) return x.toLocaleString("en-US");
 	var digits = String(+x).split(""),
 		key = ["","C","CC","CCC","CD","D","DC","DCC","DCCC","CM",
 			"","X","XX","XXX","XL","L","LX","LXX","LXXX","XC",

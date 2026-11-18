@@ -1,10 +1,10 @@
 
 
-function XPToLevel(x) {return Math.floor((x/5) ** 0.4) + 1} 
-function levelToXP(x) {return Math.ceil((x - 1) ** (1/0.4) * 5)} 
+function XPToLevel(x) {return Decimal.div(x, 5).pow(0.4).floor().add(1)} 
+function levelToXP(x) {return Decimal.sub(x, 1).pow(1 / 0.4).mul(5).ceil() } 
 function levelToColour(x) {
 	const list = ["#7f7", "#8ff", "#faf", "#fc7", "#aaf", "#ff7", "#f88"]
-	return list[x % list.length]
+	return list[+x % list.length]
 }
 
 

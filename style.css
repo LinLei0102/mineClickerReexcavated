@@ -202,7 +202,9 @@ button:hover {
 }
 
 #oreInfo {
-	text-shadow:0.2vh 0.2vh 0 #000, 0.2vh -0.2vh 0 #000, -0.2vh  0.2vh 0 #000, -0.2vh  -0.2vh 0 #000;
+	text-shadow:
+        0.2vh 0.2vh #000, 0.2vh -0.2vh #000, -0.2vh 0.2vh #000, -0.2vh -0.2vh #000,
+        0.2vh 0 #000, -0.2vh 0 #000, 0 0.2vh #000, 0 -0.2vh #000;
 	position: absolute;
 	top: 67%;
 	left: 7%;

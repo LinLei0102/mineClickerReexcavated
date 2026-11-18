@@ -181,7 +181,7 @@ function buyUpgrade(type, id) {
 
 		if (selectedUpgrade) displayUpgrade(...selectedUpgrade)
 
-		if (type == "normal" && [1, 2, 10, 24, 25, 26].includes(id))         calculateDamage()
+		if (type == "normal" && [1, 2, 10, 24, 25, 26].includes(+id))         calculateDamage()
 		else if (type == "normal" && id == 4)    game.artifactChance = getUpgradeEffect("normal", 4)
 
 		updateUpgrades();

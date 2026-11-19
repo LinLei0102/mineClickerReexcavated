@@ -122,7 +122,7 @@ function loadToolScreenInfo(tool) {
 	}
 	document.getElementById("artifactBottomButton").style.display = currentTool == "tool" ? "" : "none";
 
-	document.getElementById("autoScreenButton").style.display = Decimal.gte(game.minerSoulTotal, 1e4) ? "" : "none";
+	document.getElementById("autoScreenButton").style.display = Decimal.gte(game.minerSoulTotal, 1) ? "" : "none";
 }
 
 function closeToolScreen() {

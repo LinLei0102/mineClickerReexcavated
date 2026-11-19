@@ -5,9 +5,9 @@ function initSave() {
 		XP: new Decimal(0),
 		level: new Decimal(0),
 
-		baseDamage: new Decimal(0),
-		damage: new Decimal(0),
-		idleDamage: new Decimal(0),
+		baseDamage: new Decimal(1),
+		damage: new Decimal(1),
+		idleDamage: new Decimal(1),
 		activeDamage: new Decimal(0),
 		tapSpeed: 0,
 
@@ -75,11 +75,8 @@ function load() {
 	initSave()
 	let loadgame = JSON.parse(localStorage.getItem("mineClickerSave"))
 	if (loadgame != null) {loadGame(loadgame)}
-	//mainLoop = function() {
-  //  updateVisuals();
-  //  requestAnimationFrame(mainLoop);
-  //};
-  //requestAnimationFrame(mainLoop)
+
+	calculateDamage();
 }
 
 function exportGame() {

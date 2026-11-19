@@ -344,7 +344,7 @@ function lootOre(times = 1) {
 	let cashFactorEffect = getUpgradeEffect("normal", "9a")
 	for (let factor in factors) {
 		cashGain = Decimal.pow(cashFactorEffect, factor).mul(factors[factor]).add(cashGain);
-		artifactGain = Decimal.mul(getArtifactGain(factor), factors[factor]);
+		artifactGain = Decimal.mul(getArtifactGain(factor), factors[factor]).add(artifactGain);
 		if (factors[factor] > 0) maxFactor = Math.max(maxFactor, factor);
 	}
 	cashGain = Decimal.mul(cashGain, stats.value).mul(getUpgradeEffect("reincarnation", 1));

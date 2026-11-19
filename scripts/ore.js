@@ -314,7 +314,7 @@ function dealDamage(damage, times = 1) {
 	let effectiveHitPoints = Decimal.mul(damage, timesPerLoot);
 	let timesAlreadyHit = Decimal.sub(effectiveHitPoints, currentHitPoints).div(damage).floor();
 	if (timesAlreadyHit.add(times).gte(timesPerLoot)) {
-		lootOre(Math.floor(timesAlreadyHit.add(times).div(timesPerLoot)));
+		lootOre(timesAlreadyHit.add(times).div(timesPerLoot).floor().max(1).toNumber());
 		times = Decimal.add(times, timesAlreadyHit).toNumber() % timesPerLoot;
 		currentHitPoints = Decimal.sub(stats.hitPoints, Decimal.mul(damage, times));
 	} else {

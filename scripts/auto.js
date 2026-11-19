@@ -3,18 +3,18 @@ let autoUpgradeTime = 0;
 let autoFunctions = {
     "advance": {
         name: "Auto advance ores",
-        unlocked: () => game.minerSoulTotal >= 1e4,
-        unlockText: () => format(1e4) + " miner's souls"
+        unlocked: () => game.minerSoulTotal >= 1,
+        unlockText: () => format(1) + " miner's souls"
     },
     "upgrade": {
         name: "Auto buy upgrades",
-        unlocked: () => game.minerSoulTotal >= 1e5,
-        unlockText: () => format(1e5) + " miner's souls"
+        unlocked: () => game.minerSoulTotal >= 1e4,
+        unlockText: () => format(1e4) + " miner's souls"
     },
     "artifact": {
         name: "Auto use artifacts",
-        unlocked: () => game.minerSoulTotal >= 1e6,
-        unlockText: () => format(1e6) + " miner's souls"
+        unlocked: () => game.minerSoulTotal >= 1e5,
+        unlockText: () => format(1e5) + " miner's souls"
     },
     "comp": {
         name: "Auto upgrade companions",
@@ -23,8 +23,8 @@ let autoFunctions = {
     },
     "tool": {
         name: "Auto upgrade tools",
-        unlocked: () => game.minerSoulTotal >= 1e8,
-        unlockText: () => format(1e8) + " miner's souls"
+        unlocked: () => game.minerSoulTotal >= 1e9,
+        unlockText: () => format(1e9) + " miner's souls"
     },
 }
 

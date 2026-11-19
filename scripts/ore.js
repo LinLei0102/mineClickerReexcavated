@@ -39,7 +39,7 @@ function loadOre(x) {
 function updateOreUI(stats) {
 	stats ??= getOreStats(game.currentOre);
 
-	if (game.currentOre % 77 == 76) {
+	if (game.currentOre % 78 == 0) {
 		document.getElementById("oreIcon").style.filter = "none"
 	}
 	else if (stats.transLevel) {

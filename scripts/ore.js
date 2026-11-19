@@ -257,10 +257,10 @@ function calculateDamage() {
 	game.damage = Decimal.div(game.ascensionPoints, 100).add(1).mul(game.damage);
 
 	game.activeDamage = Decimal.mul(game.damage, getUpgradeEffect("normal", 1))
-	game.activeDamage = Math.round(game.activeDamage)
+	game.activeDamage = Decimal.round(game.activeDamage)
 	
 	game.idleDamage = Decimal.mul(game.damage, getUpgradeEffect("normal", 2))
-	game.idleDamage = Math.round(game.idleDamage)
+	game.idleDamage = Decimal.round(game.idleDamage)
 
 	game.tapSpeed = Decimal.gte(game.level, 5) ? getToolDamage("comp") : 0;
 }

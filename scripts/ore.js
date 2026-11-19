@@ -388,11 +388,15 @@ function lootOre(times = 1) {
 		document.getElementById("arrowRight").style.display = "block"
 		document.getElementById("arrowSkipRight").style.display = "block"
 	}
-	else if (Decimal.gte(game.level, 10) && Math.random() < game.artifactChance) {
-		game.artifacts = Decimal.add(game.artifacts, artifactGain);
-		game.minerSoulArtifacts = Decimal.add(game.minerSoulArtifacts, artifactGain);
-		setMessage(1,"Found an artifact!" + (maxFactor > 1 ? " x" + format(maxFactor) : ""))
-		flash("artifacts", "#ff8");
+	else if (Decimal.gte(game.level, 10)) {
+		let artifactHits = coinFlip(times, game.artifactChance) / times;
+		if (artifactHits > 0) {
+			artifactHits = Decimal.mul(artifactHits, artifactGain);
+			game.artifacts = Decimal.add(game.artifacts, artifactHits);
+			game.minerSoulArtifacts = Decimal.add(game.minerSoulArtifacts, artifactHits);
+			setMessage(1,"Found an artifact!" + (maxFactor > 1 ? " x" + format(maxFactor) : ""))
+			flash("artifacts", "#ff8");
+		}
 	}
 	if (game.currentOre == 78 && !game.gameFinished) {
 		document.getElementById("gameFinishScreen").style.display = "block"

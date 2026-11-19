@@ -437,7 +437,7 @@ const upgrades = {
             effectDisplay: x => "/" + formatWhole(x, 1),
             req: () => true,
             reqDisplay: "",
-            cost: x => 3e6 * 3 ** (x ** 1.6),
+            cost: x => 2e6 * 3 ** ((x + 0.5) ** 1.3),
             costType: "minerSouls",
         },
         9: {

@@ -146,14 +146,16 @@ function attemptOfflineTime(delta) {
 		}
 	}
 
-	if (getUpgradeEffect("reincarnation", "11a")) {
+	if (getUpgradeEffect("reincarnation", "11a") > 0) {
 		let ascensionPointsToGet = Decimal.mul(getPendingAscensionPoints(), getUpgradeEffect("reincarnation", "11a")).mul(delta)
 		game.ascensionPoints = Decimal.add(game.ascensionPoints, ascensionPointsToGet)
 
 		let message = document.createElement("p");
 		message.style.textAlign = "start";
 		message.style.fontSize = "2.5vh";
-		message.append(`${format(ascensionPointsToGet)} AP got passively generated`);
+		message.append(`Ascension passively generated ${format(ascensionPointsToGet)} AP`);
+
+		messages.push(message);
 	}
 
     if (game.gameFinished) {
@@ -164,7 +166,7 @@ function attemptOfflineTime(delta) {
 		let message = document.createElement("p");
 		message.style.textAlign = "start";
 		message.style.fontSize = "2.5vh";
-		message.append(`${format(soulsPending)} pending miner's souls became available in Reincarnation`);
+		message.append(`Reincarnation passively generated ${format(soulsPending)} pending miner's souls`);
 
 		messages.push(message);
     }

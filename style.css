@@ -71,7 +71,7 @@ button:hover {
 #background {
 	position: absolute;
 	inset: 0;
-	background-image: url('texture1.png');
+	background-image: url('assets/icons/backgrounds/1.png');
 	background-size: 100%;
 }
 
@@ -129,7 +129,7 @@ button:hover {
 	transform: translate(-50%, -50%);
 	width: 28vh;
 	height: 28vh;
-	background-image: url('oreIcons/1.png');
+	background-image: url('assets/icons/ores/1.png');
 	background-size: 100% 100%;
 	filter: drop-shadow(0 0 1vh #222);
 }
@@ -250,7 +250,7 @@ button:hover {
 	position: absolute;
 	right: 0;
 	background-color: rgba(0,0,0,0.7);
-	background-image: url('toolIcons/1.png');
+	background-image: url('assets/icons/tools/1.png');
 	background-size: 100% 100%;
 }
 
@@ -272,7 +272,7 @@ button:hover {
 	transform: translate(-50%, -50%);
 	width: 22vh;
 	height: 22vh;
-	background-image: url('toolIcons/1.png');
+	background-image: url('assets/icons/tools/1.png');
 	background-size: 100% 100%;
 	filter: drop-shadow(0 0 1vh #222);
 }

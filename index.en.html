@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+    <title>Mine Clicker Re²-excavated</title>
+				
+	<meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+
+	<link rel="icon" type="image/png" href="assets/icons/tools/2.png">
+	<link rel="stylesheet" href="98.css" />
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body onkeydown="if (!event.repeat) mineOre();">
+		<div id="main">
+			<div id="background"></div>
+			<div id="sectionLevel">
+				<div id="XPBar"></div>
+				<p style="font-size: 3vh; position: relative; z-index: 1">Level <span id="level">1</span></p>
+			</div>
+			<div id="sectionMessages">
+				<p id="message">Test message</p>
+			</div>
+			<div id="sectionCash">
+				<p>
+					You have <span id="cash">$0</span>
+					<span id="artifactHolder"><br>and <span id="artifacts">0</span> artifacts</span>
+				</p>
+			</div>
+			<p id="oreName">Sand</p>
+			<p id="oreHealth"><span id="currentHitPoints" style="color: #8ff">10</span> / <span id="maxHitPoints" style="color: #8ff">10</span> HP</p>
+			<div id="oreIcon" onpointerdown="mineOre();" oncontextmenu="return false"></div>
+			<table id="oreInfo">
+				<tr>
+					<td>
+						Value: <span id="currentOreValue" style="color: #8f8">$1</span><br>
+						<span id="currentNetGain">$1</span> / tap
+					</td>
+					<td>
+						Hardness: <span id="currentHardness" style="color: #fb8">0</span><br>
+						<span id="currentDamage">0</span> <span id="currentActiveStat">dmg / sec</span>
+					</td>
+				</tr>
+				<tr id="currentIdle">
+					<td>
+						<span id="currentIdleGain">$1</span> / sec
+					</td>
+					<td>
+						<span id="currentIdleDamage">1</span> <span id="currentIdleStat">dmg / sec</span>
+					</td>
+				</tr>
+			</table>
+			<div class="arrow" id="arrowLeft" onclick="previousOre()"></div>
+			<div class="arrow" id="arrowRight" onclick="nextOre()"></div>
+			<div class="arrow" id="arrowSkipLeft" onclick="firstOre()"></div>
+			<div class="arrow" id="arrowSkipRight" onclick="lastOre()"></div>
+			<div class="autoToggles">
+				<div class="autoButton" id="autoToggle_advance">
+					Auto advance: <span class="status">On</span>
+				</div>
+			</div>
+			<div class="bottomButtons">
+				<div class="bottomButton" onclick="openToolScreen()">TOOL</div>
+				<div class="bottomButton" id="upgradeBottomButton" style="color: #777" onclick="openUpgradeScreen()">UPG</div>
+				<div class="bottomButton" id="ascensionBottomButton" style="color: #777" onclick="openAscensionScreen()">100</div>
+				<div class="bottomButton" onclick="openStatsScreen()">INFO</div>
+			</div>
+			
+			<div id="toolScreen">
+				<div style="height:10vh"></div>
+				<p style="color: #333; white-space: nowrap">You have a<br><span id="currentTool" style="font-size: 8vh">Shovel</span></p>
+				<div id="toolIconLarge"></div>
+				<div id="toolUpgradeButton" onclick="upgradeTool()">Upgrade to a <span id="nextTool">Pickaxe</span><br><span id="nextDamage">Damage: 1 -> 3</span><br>Costs <span id="nextToolCost">$10</span></div>
+				<p id="toolScreenCashText">You have <span id="toolScreenCash">$0</span></p>
+				<div class="bottomButton" id="artifactBottomButton" style="color: #777;" onclick="openArtifactScreen()">Unlocks at level 10!</div>
+				<div class="bottomButtons">
+					<div class="bottomButton" onclick="closeToolScreen()">Back</div>
+					<div class="bottomButton" onclick="loadToolScreenInfo('tool')">TOOL</div>
+					<div class="bottomButton" id="compButton" style="color: #777" onclick="loadToolScreenInfo('comp')">10</div>
+					<div class="bottomButton" id="autoScreenButton" onclick="showAutoScreen()">AUTO</div>
+				</div>
+			</div>
+			
+			<div id="artifactScreen">
+				<p style="color: #ff8">You have <span id="gildingScreenArtifacts">0</span> artifacts</p>
+				<p style="font-size: 2vh">Artifacts have a 100% drop chance when breaking an ore for the first time, or a <span id="artifactChance">5</span>% chance when breaking any other ore. Using them has a chance of improving your tool. Upgrading your tool will reset the boost.</p><br>
+				<p>Current boost: <span id="artifactBoost">0</span>%</p>
+				<div class="bottomButton" style="width: 84%; margin-left: 8%" onclick="useArtifact()">Use artifact</div>
+				<p style="font-size: 3vh">Your artifact boost is currently capped at <span id="artifactBoostCap">150</span>%</p>
+				<p id="lastBoost" style="font-size: 3vh"></p>
+				<div class="bottomButtons">
+					<div class="bottomButton" onclick="closeArtifactScreen()">Back</div>
+				</div>
+			</div>
+			
+			<div id="ascensionScreen">
+				<p style="color: #b8f">You have <span id="ascensionPoints">0</span> ascension points (AP)</p>
+				<div id="ascendButton" onclick="confirmAscension()">Ascend and gain<br><b><span id="ascensionPointsToGet">0</span> AP</b></div>
+				<p id="ascensionScreenCashText">
+					Next at <br>
+					<span id="ascensionScreenCash">$0</span> / <span id="nextAscensionPoint">$0</span><br/>
+					total cash <br><br>
+					Ascension will reset your tool and upgrades in exchange for AP. Each AP gives a 1% boost to damage.
+				</p>
+				<div id="reincarnationTabButton" onclick="openReincarnationScreen()">Reincarnation</div>
+				<div class="bottomButtons">
+					<div class="bottomButton" onclick="closeAscensionScreen()">Back</div>
+				</div>
+			</div>
+			
+			<div id="ascensionConfirmation">
+				<p style="color: #ddd">Are you sure you want to ascend?</p>
+				<center>
+					<button onclick="ascend()">Yes</button>
+					<button onclick="cancelAscension()">No</button>
+				</center><br>
+			</div>
+			
+			<div id="reincarnationScreen">
+				<p style="color: #3ff; text-shadow: 0 0 0.5vw white;">You have <span id="minerSouls">0</span> miner's souls</p>
+				<table id="minerSoulBreakdown">
+					<caption>Soul collection rate</caption>
+					<tbody id="minerSoulBreakdownBody"></tbody>
+					<tfoot>
+						<tr>
+							<th scope="row">Final rate</th>
+							<td id="minerSoulRate"></td>
+						</tr>
+					</tfoot>
+				</table>
+				<p id="reincarnationText" style="margin:1em .5em">
+					Reincarnation will reset everything below in exchange for miner's souls. Use miner's souls for powerful upgrades on the UPG tab.
+				</p>
+				<div id="reincarnateButton" onclick="confirmReincarnation()">Reincarnate and gain<br><b><span id="minerSoulsToGet">0</span> miner's souls</b></div>
+				<div class="bottomButtons">
+					<div class="bottomButton" onclick="closeReincarnationScreen()">Back</div>
+				</div>
+			</div>
+			
+			<div id="reincarnationConfirmation">
+				<p style="color: #ddd">Are you sure you want to reincarnate?</p>
+				<center>
+					<button onclick="reincarnate()">Yes</button>
+					<button onclick="cancelReincarnation()">No</button>
+				</center><br>
+			</div>
+			
+			<div id="gameFinishScreen">
+				<p style="color: #ffb">Congrats! You have transcended and beaten the original game!</p>
+				<p style="font-size: 2vh">However, it is yet to be the end of the journey...</p>
+				<p style="font-size: 2vh">(check the ASC tab)</p>
+				<center>
+					<button onclick="document.getElementById('gameFinishScreen').style.display = 'none'">Okay</button>
+				</center><br>
+			</div>
+			
+			<div id="gameTrulyFinishScreen">
+				<p style="color: #ffb">Congrats! You have reached the cash cap and truly beaten the game!</p>
+				<p style="font-size: 2vh">However, is it possible to reach the ore cap too...?</p>
+				<center>
+					<button onclick="document.getElementById('gameTrulyFinishScreen').style.display = 'none'">Okay</button>
+				</center><br>
+			</div>
+			
+			<div id="autoScreen">
+				<div id="autoButtons">
+					<h3>
+						Auto controls
+					</h3>
+				</div>
+				<div class="bottomButtons">
+					<div class="bottomButton" onclick="hideAutoScreen()">Back</div>
+				</div>
+			</div>
+			
+			<div id="upgradeScreen">
+				<div id="upgradeHolder">
+					<div id="upgradeHolder_normal">
+						<p style="color: #333; margin: .6em">
+							You have <span id="upgradeScreenCash">$0</span>
+							<span id="upgradeArtifactHolder"><br>and <span id="upgradeScreenArtifacts">0</span> artifacts</span>
+						</p>
+					</div>
+					<div id="upgradeHolder_reincarnation" style="--page: 1">
+						<p style="color: #3ff; text-shadow: 0 0 0.5vw white; margin: .6em">
+							You have <span id="upgradeScreenMinerSouls">0</span> miner's souls
+							<br>(earned <span id="upgradeScreenMinerSoulTotal">0</span> total)
+						</p>
+					</div>
+				</div>
+				<div id="upgradeInfo">Tap an upgrade for info</div>
+				<div id="upgradeButton" onclick="buyUpgrade()">Tap an upgrade for info</div>
+				<div class="bottomButtons">
+					<div class="bottomButton" onclick="closeUpgradeScreen()">Back</div>
+				</div>
+			</div>
+			
+			<div id="statsScreen">
+				<p style="font-size: 8vh">Stats &amp; Info</p>
+				<p style="text-align: left">Time played: <span id="timePlayed">0</span><br>Total ores mined: <span id="totalOresMined">0</span></p><br>
+				<div id="settings">
+					<button onclick="changeNumberFormat()">Large number formatting: <span id="numberFormat">Standard</span></button>
+					<button onclick="enableDisableMessages()">Top bar messages: <span id="topBarMessages">On</span></button>
+					<button onclick="enableDisableEvilMode()">Evil mode: <span id="evilMode">Off</span></button>
+					<button id="homeStatButton" onclick="changeHomeStat()">Stat on main screen: <span id="homeStat">Damage</span></button>
+					<button onclick="switchLanguage()">Language: <span id="language">English</span></button>
+					<button onclick="exportGame()">Export game</button>
+					<button onclick="importGame()">Import game</button>
+					<button style="color: #822" onclick="hardReset()">Hard reset</button>
+				</div>
+				<div class="bottomButtons">
+					<p style="font-size: 2.5vh; padding-bottom: 1vh; color: #777">
+						Mine Clicker Re-excavated by Demonin<br>
+						"Re<sup>2</sup>-excavated" mod by ducdat0507<br>
+						Original Mine Clicker by Tolan (2014)
+						<span id="evilModeCredit"><br>Ore icons generated using Midjourney</span>
+					</p>
+					<div class="bottomButton" onclick="closeStatsScreen()">Back</div>
+				</div>
+			</div>
+			
+			<div id="popupScreen" style="display: none">
+				<div id="popupContent" style="font-size: 2.5vh"></div>
+				<center>
+					<button onclick="document.getElementById('popupScreen').style.display = 'none'">Okay</button>
+				</center>
+			</div>
+		</div>
+
+		<script src="scripts/lang.js"></script>
+		<script src="scripts/ext/break_eternity.min.js"></script>
+
+		<script src="scripts/data/constants.js"></script>
+		<script src="scripts/data/upgrades.js"></script>
+
+		<script src="scripts/artifact.js"></script>
+		<script src="scripts/ascension.js"></script>
+		<script src="scripts/auto.js"></script>
+		<script src="scripts/format.js"></script>
+		<script src="scripts/main.js"></script>
+		<script src="scripts/ore.js"></script>
+		<script src="scripts/reincarnation.js"></script>
+		<script src="scripts/settings.js"></script>
+		<script src="scripts/stats.js"></script>
+		<script src="scripts/storage.js"></script>
+		<script src="scripts/tool.js"></script>
+		<script src="scripts/ui.js"></script>
+		<script src="scripts/upgrades.js"></script>
+		<script src="scripts/utils.js"></script>
+  </body>
+</html>

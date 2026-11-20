@@ -1,19 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
-    <title>Mine Clicker Re²-excavated</title>
+    <title>挖矿点击器 Re²-excavated 汉化版</title>
 				
 	<meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
 
-	<link rel="prefetch" href="oreicons" />
-	<link rel="icon" type="image/x-icon" href="toolIcons/2.png">
+	<link rel="icon" type="image/png" href="assets/icons/tools/2.png">
 	<link rel="stylesheet" href="98.css" />
 
-    <link href="style.css" rel="stylesheet" type="text/css" />
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body onkeydown="if (!event.repeat) mineOre();">
@@ -21,37 +19,37 @@
 			<div id="background"></div>
 			<div id="sectionLevel">
 				<div id="XPBar"></div>
-				<p style="font-size: 3vh; position: relative; z-index: 1">Level <span id="level">1</span></p>
+				<p style="font-size: 3vh; position: relative; z-index: 1">等级 <span id="level">1</span></p>
 			</div>
 			<div id="sectionMessages">
-				<p id="message">Test message</p>
+				<p id="message">测试消息</p>
 			</div>
 			<div id="sectionCash">
 				<p>
-					You have <span id="cash">$0</span>
-					<span id="artifactHolder"><br>and <span id="artifacts">0</span> artifacts</span>
+					你有 <span id="cash">$0</span>
+					<span id="artifactHolder"><br>以及 <span id="artifacts">0</span> 个神器</span>
 				</p>
 			</div>
-			<p id="oreName">Sand</p>
-			<p id="oreHealth"><span id="currentHitPoints" style="color: #8ff">10</span> / <span id="maxHitPoints" style="color: #8ff">10</span> HP</p>
+			<p id="oreName">沙子</p>
+			<p id="oreHealth"><span id="currentHitPoints" style="color: #8ff">10</span> / <span id="maxHitPoints" style="color: #8ff">10</span> 生命值</p>
 			<div id="oreIcon" onpointerdown="mineOre();" oncontextmenu="return false"></div>
 			<table id="oreInfo">
 				<tr>
 					<td>
-						Value: <span id="currentOreValue" style="color: #8f8">$1</span><br>
-						<span id="currentNetGain">$1</span> / tap
+						价值：<span id="currentOreValue" style="color: #8f8">$1</span><br>
+						<span id="currentNetGain">$1</span> / 点击
 					</td>
 					<td>
-						Hardness: <span id="currentHardness" style="color: #fb8">0</span><br>
-						<span id="currentDamage">0</span> <span id="currentActiveStat">dmg / sec</span>
+						硬度：<span id="currentHardness" style="color: #fb8">0</span><br>
+						<span id="currentDamage">0</span> <span id="currentActiveStat">伤害/秒</span>
 					</td>
 				</tr>
 				<tr id="currentIdle">
 					<td>
-						<span id="currentIdleGain">$1</span> / sec
+						<span id="currentIdleGain">$1</span> / 秒
 					</td>
 					<td>
-						<span id="currentIdleDamage">1</span> <span id="currentIdleStat">dmg / sec</span>
+						<span id="currentIdleDamage">1</span> <span id="currentIdleStat">伤害/秒</span>
 					</td>
 				</tr>
 			</table>
@@ -61,120 +59,120 @@
 			<div class="arrow" id="arrowSkipRight" onclick="lastOre()"></div>
 			<div class="autoToggles">
 				<div class="autoButton" id="autoToggle_advance">
-					Auto advance: <span class="status">On</span>
+					自动前进：<span class="status">开</span>
 				</div>
 			</div>
 			<div class="bottomButtons">
-				<div class="bottomButton" onclick="openToolScreen()">TOOL</div>
-				<div class="bottomButton" id="upgradeBottomButton" style="color: #777" onclick="openUpgradeScreen()">UPG</div>
+				<div class="bottomButton" onclick="openToolScreen()">工具</div>
+				<div class="bottomButton" id="upgradeBottomButton" style="color: #777" onclick="openUpgradeScreen()">升级</div>
 				<div class="bottomButton" id="ascensionBottomButton" style="color: #777" onclick="openAscensionScreen()">100</div>
-				<div class="bottomButton" onclick="openStatsScreen()">INFO</div>
+				<div class="bottomButton" onclick="openStatsScreen()">信息</div>
 			</div>
 			
 			<div id="toolScreen">
 				<div style="height:10vh"></div>
-				<p style="color: #333; white-space: nowrap">You have a<br><span id="currentTool" style="font-size: 8vh">Shovel</span></p>
+				<p style="color: #333; white-space: nowrap">你当前使用<br><span id="currentTool" style="font-size: 8vh">铲子</span></p>
 				<div id="toolIconLarge"></div>
-				<div id="toolUpgradeButton" onclick="upgradeTool()">Upgrade to a <span id="nextTool">Pickaxe</span><br><span id="nextDamage">Damage: 1 -> 3</span><br>Costs <span id="nextToolCost">$10</span></div>
-				<p id="toolScreenCashText">You have <span id="toolScreenCash">$0</span></p>
-				<div class="bottomButton" id="artifactBottomButton" style="color: #777;" onclick="openArtifactScreen()">Unlocks at level 10!</div>
+				<div id="toolUpgradeButton" onclick="upgradeTool()">升级为 <span id="nextTool">镐子</span><br><span id="nextDamage">伤害：1 -> 3</span><br>花费 <span id="nextToolCost">$10</span></div>
+				<p id="toolScreenCashText">你有 <span id="toolScreenCash">$0</span></p>
+				<div class="bottomButton" id="artifactBottomButton" style="color: #777;" onclick="openArtifactScreen()">等级 10 解锁！</div>
 				<div class="bottomButtons">
-					<div class="bottomButton" onclick="closeToolScreen()">Back</div>
-					<div class="bottomButton" onclick="loadToolScreenInfo('tool')">TOOL</div>
+					<div class="bottomButton" onclick="closeToolScreen()">返回</div>
+					<div class="bottomButton" onclick="loadToolScreenInfo('tool')">工具</div>
 					<div class="bottomButton" id="compButton" style="color: #777" onclick="loadToolScreenInfo('comp')">10</div>
-					<div class="bottomButton" id="autoScreenButton" onclick="showAutoScreen()">AUTO</div>
+					<div class="bottomButton" id="autoScreenButton" onclick="showAutoScreen()">自动</div>
 				</div>
 			</div>
 			
 			<div id="artifactScreen">
-				<p style="color: #ff8">You have <span id="gildingScreenArtifacts">0</span> artifacts</p>
-				<p style="font-size: 2vh">Artifacts have a 100% drop chance when breaking an ore for the first time, or a <span id="artifactChance">5</span>% chance when breaking any other ore. Using them has a chance of improving your tool. Upgrading your tool will reset the boost.</p><br>
-				<p>Current boost: <span id="artifactBoost">0</span>%</p>
-				<div class="bottomButton" style="width: 84%; margin-left: 8%" onclick="useArtifact()">Use artifact</div>
-				<p style="font-size: 3vh">Your artifact boost is currently capped at <span id="artifactBoostCap">150</span>%</p>
+				<p style="color: #ff8">你有 <span id="gildingScreenArtifacts">0</span> 个神器</p>
+				<p style="font-size: 2vh">首次破坏某种矿石时必定掉落神器；此后每次破坏矿石有 <span id="artifactChance">5</span>% 概率掉落。使用神器有机会强化工具，而升级工具会清空加成。</p><br>
+				<p>当前加成：<span id="artifactBoost">0</span>%</p>
+				<div class="bottomButton" style="width: 84%; margin-left: 8%" onclick="useArtifact()">使用神器</div>
+				<p style="font-size: 3vh">神器加成上限为 <span id="artifactBoostCap">150</span>%</p>
 				<p id="lastBoost" style="font-size: 3vh"></p>
 				<div class="bottomButtons">
-					<div class="bottomButton" onclick="closeArtifactScreen()">Back</div>
+					<div class="bottomButton" onclick="closeArtifactScreen()">返回</div>
 				</div>
 			</div>
 			
 			<div id="ascensionScreen">
-				<p style="color: #b8f">You have <span id="ascensionPoints">0</span> ascension points (AP)</p>
-				<div id="ascendButton" onclick="confirmAscension()">Ascend and gain<br><b><span id="ascensionPointsToGet">0</span> AP</b></div>
+				<p style="color: #b8f">你有 <span id="ascensionPoints">0</span> 点飞升点（AP）</p>
+				<div id="ascendButton" onclick="confirmAscension()">飞升并获得<br><b><span id="ascensionPointsToGet">0</span> AP</b></div>
 				<p id="ascensionScreenCashText">
-					Next at <br>
+					下一个节点需要 <br>
 					<span id="ascensionScreenCash">$0</span> / <span id="nextAscensionPoint">$0</span><br/>
-					total cash <br><br>
-					Ascension will reset your tool and upgrades in exchange for AP. Each AP gives a 1% boost to damage.
+					累计现金 <br><br>
+					飞升会重置你的工具与升级，以换取 AP。每 1 点 AP 使伤害提高 1%。
 				</p>
-				<div id="reincarnationTabButton" onclick="openReincarnationScreen()">Reincarnation</div>
+				<div id="reincarnationTabButton" onclick="openReincarnationScreen()">轮回</div>
 				<div class="bottomButtons">
-					<div class="bottomButton" onclick="closeAscensionScreen()">Back</div>
+					<div class="bottomButton" onclick="closeAscensionScreen()">返回</div>
 				</div>
 			</div>
 			
 			<div id="ascensionConfirmation">
-				<p style="color: #ddd">Are you sure you want to ascend?</p>
+				<p style="color: #ddd">确定要飞升吗？</p>
 				<center>
-					<button onclick="ascend()">Yes</button>
-					<button onclick="cancelAscension()">No</button>
+					<button onclick="ascend()">是</button>
+					<button onclick="cancelAscension()">否</button>
 				</center><br>
 			</div>
 			
 			<div id="reincarnationScreen">
-				<p style="color: #3ff; text-shadow: 0 0 0.5vw white;">You have <span id="minerSouls">0</span> miner's souls</p>
+				<p style="color: #3ff; text-shadow: 0 0 0.5vw white;">你有 <span id="minerSouls">0</span> 个矿工灵魂</p>
 				<table id="minerSoulBreakdown">
-					<caption>Soul collection rate</caption>
+					<caption>灵魂收集速率</caption>
 					<tbody id="minerSoulBreakdownBody"></tbody>
 					<tfoot>
 						<tr>
-							<th scope="row">Final rate</th>
+							<th scope="row">最终速率</th>
 							<td id="minerSoulRate"></td>
 						</tr>
 					</tfoot>
 				</table>
 				<p id="reincarnationText" style="margin:1em .5em">
-					Reincarnation will reset everything below in exchange for miner's souls. Use miner's souls for powerful upgrades on the UPG tab.
+					轮回会重置下方所有内容，以换取矿工灵魂。在「升级」页面使用矿工灵魂购买强力升级。
 				</p>
-				<div id="reincarnateButton" onclick="confirmReincarnation()">Reincarnate and gain<br><b><span id="minerSoulsToGet">0</span> miner's souls</b></div>
+				<div id="reincarnateButton" onclick="confirmReincarnation()">轮回并获得<br><b><span id="minerSoulsToGet">0</span> 个矿工灵魂</b></div>
 				<div class="bottomButtons">
-					<div class="bottomButton" onclick="closeReincarnationScreen()">Back</div>
+					<div class="bottomButton" onclick="closeReincarnationScreen()">返回</div>
 				</div>
 			</div>
 			
 			<div id="reincarnationConfirmation">
-				<p style="color: #ddd">Are you sure you want to reincarnate?</p>
+				<p style="color: #ddd">确定要轮回吗？</p>
 				<center>
-					<button onclick="reincarnate()">Yes</button>
-					<button onclick="cancelReincarnation()">No</button>
+					<button onclick="reincarnate()">是</button>
+					<button onclick="cancelReincarnation()">否</button>
 				</center><br>
 			</div>
 			
 			<div id="gameFinishScreen">
-				<p style="color: #ffb">Congrats! You have transcended and beaten the original game!</p>
-				<p style="font-size: 2vh">However, it is yet to be the end of the journey...</p>
-				<p style="font-size: 2vh">(check the ASC tab)</p>
+				<p style="color: #ffb">恭喜！你已超越并通关原版游戏！</p>
+				<p style="font-size: 2vh">不过，旅程还远未结束……</p>
+				<p style="font-size: 2vh">（查看「飞升」页面）</p>
 				<center>
-					<button onclick="document.getElementById('gameFinishScreen').style.display = 'none'">Okay</button>
+					<button onclick="document.getElementById('gameFinishScreen').style.display = 'none'">好的</button>
 				</center><br>
 			</div>
 			
 			<div id="gameTrulyFinishScreen">
-				<p style="color: #ffb">Congrats! You have reached the cash cap and truly beaten the game!</p>
-				<p style="font-size: 2vh">However, is it possible to reach the ore cap too...?</p>
+				<p style="color: #ffb">恭喜！你已达到现金上限，真正通关了这款游戏！</p>
+				<p style="font-size: 2vh">不过，你能否也达到矿石上限呢……？</p>
 				<center>
-					<button onclick="document.getElementById('gameTrulyFinishScreen').style.display = 'none'">Okay</button>
+					<button onclick="document.getElementById('gameTrulyFinishScreen').style.display = 'none'">好的</button>
 				</center><br>
 			</div>
 			
 			<div id="autoScreen">
 				<div id="autoButtons">
 					<h3>
-						Auto controls
+						自动控制
 					</h3>
 				</div>
 				<div class="bottomButtons">
-					<div class="bottomButton" onclick="hideAutoScreen()">Back</div>
+					<div class="bottomButton" onclick="hideAutoScreen()">返回</div>
 				</div>
 			</div>
 			
@@ -182,73 +180,75 @@
 				<div id="upgradeHolder">
 					<div id="upgradeHolder_normal">
 						<p style="color: #333; margin: .6em">
-							You have <span id="upgradeScreenCash">$0</span>
-							<span id="upgradeArtifactHolder"><br>and <span id="upgradeScreenArtifacts">0</span> artifacts</span>
+							你有 <span id="upgradeScreenCash">$0</span>
+							<span id="upgradeArtifactHolder"><br>以及 <span id="upgradeScreenArtifacts">0</span> 个神器</span>
 						</p>
 					</div>
 					<div id="upgradeHolder_reincarnation" style="--page: 1">
 						<p style="color: #3ff; text-shadow: 0 0 0.5vw white; margin: .6em">
-							You have <span id="upgradeScreenMinerSouls">0</span> miner's souls
-							<br>(earned <span id="upgradeScreenMinerSoulTotal">0</span> total)
+							你有 <span id="upgradeScreenMinerSouls">0</span> 个矿工灵魂
+							<br>（累计获得 <span id="upgradeScreenMinerSoulTotal">0</span>）
 						</p>
 					</div>
 				</div>
-				<div id="upgradeInfo">Tap an upgrade for info</div>
-				<div id="upgradeButton" onclick="buyUpgrade()">Tap an upgrade for info</div>
+				<div id="upgradeInfo">点击升级以查看详情</div>
+				<div id="upgradeButton" onclick="buyUpgrade()">点击升级以查看详情</div>
 				<div class="bottomButtons">
-					<div class="bottomButton" onclick="closeUpgradeScreen()">Back</div>
+					<div class="bottomButton" onclick="closeUpgradeScreen()">返回</div>
 				</div>
 			</div>
 			
 			<div id="statsScreen">
-				<p style="font-size: 8vh">Stats &amp; Info</p>
-				<p style="text-align: left">Time played: <span id="timePlayed">0</span><br>Total ores mined: <span id="totalOresMined">0</span></p><br>
+				<p style="font-size: 8vh">统计与信息</p>
+				<p style="text-align: left">游玩时间：<span id="timePlayed">0</span><br>累计挖掘矿石：<span id="totalOresMined">0</span></p><br>
 				<div id="settings">
-					<button onclick="changeNumberFormat()">Large number formatting: <span id="numberFormat">Standard</span></button>
-					<button onclick="enableDisableMessages()">Top bar messages: <span id="topBarMessages">On</span></button>
-					<button onclick="enableDisableEvilMode()">Evil mode: <span id="evilMode">Off</span></button>
-					<button id="homeStatButton" onclick="changeHomeStat()">Stat on main screen: <span id="homeStat">Damage</span></button>
-					<button onclick="exportGame()">Export game</button>
-					<button onclick="importGame()">Import game</button>
-					<button style="color: #822" onclick="hardReset()">Hard reset</button>
+					<button onclick="changeNumberFormat()">大数字格式：<span id="numberFormat">标准</span></button>
+					<button onclick="enableDisableMessages()">顶部消息：<span id="topBarMessages">开</span></button>
+					<button onclick="enableDisableEvilMode()">邪恶模式：<span id="evilMode">关</span></button>
+					<button id="homeStatButton" onclick="changeHomeStat()">主界面数据：<span id="homeStat">伤害</span></button>
+					<button onclick="switchLanguage()">语言：<span id="language">中文</span></button>
+					<button onclick="exportGame()">导出存档</button>
+					<button onclick="importGame()">导入存档</button>
+					<button style="color: #822" onclick="hardReset()">重置存档</button>
 				</div>
 				<div class="bottomButtons">
 					<p style="font-size: 2.5vh; padding-bottom: 1vh; color: #777">
-						Mine Clicker Re-excavated by Demonin<br>
-						"Re<sup>2</sup>-excavated" mod by ducdat0507<br>
-						Original Mine Clicker by Tolan (2014)
-						<span id="evilModeCredit"><br>Ore icons generated using Midjourney</span>
+						挖矿点击器 Re-excavated，作者：Demonin<br>
+						「Re<sup>2</sup>-excavated」模组作者：ducdat0507<br>
+						原版 Mine Clicker 作者：Tolan（2014）
+						<span id="evilModeCredit"><br>矿石图标由 Midjourney 生成</span>
 					</p>
-					<div class="bottomButton" onclick="closeStatsScreen()">Back</div>
+					<div class="bottomButton" onclick="closeStatsScreen()">返回</div>
 				</div>
 			</div>
 			
 			<div id="popupScreen" style="display: none">
 				<div id="popupContent" style="font-size: 2.5vh"></div>
 				<center>
-					<button onclick="document.getElementById('popupScreen').style.display = 'none'">Okay</button>
+					<button onclick="document.getElementById('popupScreen').style.display = 'none'">好的</button>
 				</center>
 			</div>
 		</div>
 
+		<script src="scripts/lang.js"></script>
 		<script src="scripts/ext/break_eternity.min.js"></script>
 
-		<script src="scripts/data/constants.js"></script>
-		<script src="scripts/data/upgrades.js"></script>
+		<script src="scripts/zh/data/constants.js"></script>
+		<script src="scripts/zh/data/upgrades.js"></script>
 
-		<script src="scripts/artifact.js"></script>
-		<script src="scripts/ascension.js"></script>
-		<script src="scripts/auto.js"></script>
-		<script src="scripts/format.js"></script>
-		<script src="scripts/main.js"></script>
-		<script src="scripts/ore.js"></script>
-		<script src="scripts/reincarnation.js"></script>
-		<script src="scripts/settings.js"></script>
-		<script src="scripts/stats.js"></script>
-		<script src="scripts/storage.js"></script>
-		<script src="scripts/tool.js"></script>
-		<script src="scripts/ui.js"></script>
-		<script src="scripts/upgrades.js"></script>
-		<script src="scripts/utils.js"></script>
+		<script src="scripts/zh/artifact.js"></script>
+		<script src="scripts/zh/ascension.js"></script>
+		<script src="scripts/zh/auto.js"></script>
+		<script src="scripts/zh/format.js"></script>
+		<script src="scripts/zh/main.js"></script>
+		<script src="scripts/zh/ore.js"></script>
+		<script src="scripts/zh/reincarnation.js"></script>
+		<script src="scripts/zh/settings.js"></script>
+		<script src="scripts/zh/stats.js"></script>
+		<script src="scripts/zh/storage.js"></script>
+		<script src="scripts/zh/tool.js"></script>
+		<script src="scripts/zh/ui.js"></script>
+		<script src="scripts/zh/upgrades.js"></script>
+		<script src="scripts/zh/utils.js"></script>
   </body>
 </html>

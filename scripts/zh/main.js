@@ -151,7 +151,7 @@ function attemptOfflineTime(delta) {
 		let message = document.createElement("p");
 		message.style.textAlign = "start";
 		message.style.fontSize = "2.5vh";
-		message.append(`飞升被动获得了 ${format(ascensionPointsToGet)} AP`);
+		message.append(`飞升被动获得了 ${format(ascensionPointsToGet)} 点飞升点`);
 
 		messages.push(message);
 	}

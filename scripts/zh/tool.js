@@ -56,9 +56,9 @@ function getToolLevel(type) {
 
 function getToolName(type, x) {
 	if (type == "tool") {
-		return x < 25 ? toolNames[x - 1] : "吞噬者 Mk. " + romanize(x - 24);
+		return x < 25 ? toolNames[x - 1] : "吞噬者 " + (x - 24) + " 型";
 	} else if (type == "comp") {
-		return x <= compNames.length ? compNames[x - 1] : "灰质 Mk. " + romanize(x - compNames.length);
+		return x <= compNames.length ? compNames[x - 1] : "灰质 " + (x - compNames.length) + " 型";
 	}
 }
 
@@ -105,8 +105,8 @@ function loadToolScreenInfo(tool) {
 		if (damage < 1e6) document.getElementById("nextDamage").innerHTML = "伤害：" + format(damage) + " -> " + format(nextDamage)
 		else document.getElementById("nextDamage").innerHTML = format(damage) + " -> " + format(nextDamage)
 	} else if (currentTool == "comp") {
-		if (damage < 1e6) document.getElementById("nextDamage").innerHTML = "速度：" + format(damage) + "/秒 -> " + format(nextDamage) + "/s"
-		else document.getElementById("nextDamage").innerHTML = format(damage) + "/秒 -> " + format(nextDamage) + "/s"
+		if (damage < 1e6) document.getElementById("nextDamage").innerHTML = "速度：" + format(damage) + "/秒 -> " + format(nextDamage) + "/秒"
+		else document.getElementById("nextDamage").innerHTML = format(damage) + "/秒 -> " + format(nextDamage) + "/秒"
 	}
 	
 	document.getElementById("nextToolCost").innerHTML = getToolCurrency(currentTool, getToolCost(currentTool))

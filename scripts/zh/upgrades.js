@@ -109,7 +109,8 @@ function getUpgradeEffect(type, x) {
 
 function getUpgradeCurrencyName(name) {
     return {
-        minerSouls: "矿工灵魂"
+        minerSouls: "矿工灵魂",
+        artifacts: "神器"
     }[name] || name;
 }
 
